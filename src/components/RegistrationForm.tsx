@@ -48,12 +48,12 @@ export default function RegistrationForm() {
       e.full_name = 'Full name is required.'
     }
 
-    // Student ID validation: Must start with ETS followed by digits (e.g. ETS123456, ETS20261234)
+    // Student ID validation: Must follow ETS0000/00 format (e.g. ETS1234/16)
     const normalizedId = data.student_id.trim().toUpperCase()
     if (!normalizedId) {
       e.student_id = 'Student ID is required.'
-    } else if (!/^ETS\d+$/.test(normalizedId)) {
-      e.student_id = 'Student ID must start with ETS followed by numbers.'
+    } else if (!/^ETS\d{4}\/\d{2}$/.test(normalizedId)) {
+      e.student_id = 'Student ID must follow the format ETS0000/00 (e.g. ETS1234/16).'
     }
 
     // Email validation: Accepts ANY valid personal or university email address
@@ -89,8 +89,8 @@ export default function RegistrationForm() {
   }
 
   const handleChange = (key: keyof FormData, value: string) => {
-    // If updating student_id, automatically normalize to uppercase
-    const processedValue = key === 'student_id' ? value.toUpperCase().replace(/\s+/g, '') : value
+    // If updating student_id, automatically normalize to uppercase, remove spaces, and replace backslashes
+    const processedValue = key === 'student_id' ? value.toUpperCase().replace(/\s+/g, '').replace(/\\/g, '/') : value
     setData((d) => ({ ...d, [key]: processedValue }))
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }))
   }
@@ -241,13 +241,13 @@ export default function RegistrationForm() {
               </label>
               <input
                 type="text"
-                placeholder="e.g. ETS123456"
+                placeholder="e.g. ETS1234/16"
                 className={inputClass('student_id')}
                 value={data.student_id}
                 onChange={(e) => handleChange('student_id', e.target.value)}
               />
               <span className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 block">
-                Must start with ETS followed by numbers (e.g. ETS123456)
+                Format: ETS0000/00 (e.g. ETS1234/16)
               </span>
               {errors.student_id && (
                 <p className="mt-1 text-xs font-semibold text-brand-red">{errors.student_id}</p>
