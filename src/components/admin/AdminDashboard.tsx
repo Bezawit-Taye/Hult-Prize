@@ -136,9 +136,19 @@ export default function AdminDashboard({ userEmail }: { userEmail: string }) {
       new Date(r.created_at).toLocaleString(),
     ])
 
+    // Helper to sanitize CSV cells against CSV Formula Injection (=, +, -, @, \t, \r)
+    const sanitizeCsvCell = (val: unknown): string => {
+      let str = String(val ?? '')
+      // Neutralize CSV formula injection by prepending a single quote if starting with dangerous triggers
+      if (/^[=+\-@\t\r]/.test(str)) {
+        str = `'${str}`
+      }
+      return `"${str.replace(/"/g, '""')}"`
+    }
+
     const csvContent = [headers, ...rows]
-      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-      .join('\n')
+      .map((row) => row.map(sanitizeCsvCell).join(','))
+      .join('\r\n')
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
     const url = URL.createObjectURL(blob)

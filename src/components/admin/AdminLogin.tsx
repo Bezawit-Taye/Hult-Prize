@@ -29,8 +29,7 @@ export default function AdminLogin() {
       })
 
       if (authError) {
-        console.error('Supabase login error:', authError)
-        setError(authError.message || 'Invalid email or password. Please try again.')
+        setError('Invalid admin credentials. Please verify your email and password.')
         return
       }
 

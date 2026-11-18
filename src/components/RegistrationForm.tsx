@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { CheckCircle2, Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
@@ -102,47 +101,29 @@ export default function RegistrationForm() {
 
     setLoading(true)
     try {
-      const supabase = createClient()
-      const normalizedStudentId = data.student_id.trim().toUpperCase()
-      const normalizedEmail = data.email.trim().toLowerCase()
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
 
-      const { data: result, error } = await supabase
-        .from('registrations')
-        .insert({
-          full_name: data.full_name.trim(),
-          student_id: normalizedStudentId,
-          email: normalizedEmail,
-          phone: data.phone.trim(),
-          department: data.department.trim(),
-          academic_year: data.academic_year,
-          team_status: data.team_status,
-          team_name: data.team_name.trim() || null,
-          interest: data.interest.trim() || null,
-        })
-        .select('id')
-        .single()
+      const result = await res.json()
 
-      if (error) {
-        if (error.code === '23505') {
-          if (error.message.includes('student_id')) {
-            setSubmitError('A registration with this Student ID already exists. Please verify your ID.')
-          } else if (error.message.includes('email')) {
-            setSubmitError('A registration with this Email address already exists. Please use a different email.')
-          } else {
-            setSubmitError('A registration with this Student ID or Email already exists. Please verify your details.')
-          }
-        } else {
-          setSubmitError(
-            'Unable to process registration. Please check your connection or try again.'
-          )
+      if (!res.ok) {
+        if (result.fieldErrors) {
+          setErrors((prev) => ({ ...prev, ...result.fieldErrors }))
         }
+        setSubmitError(
+          result.error || 'Unable to process registration. Please check your connection or try again.'
+        )
         return
       }
 
-      const ref = result.id.split('-')[0].toUpperCase()
-      setSuccess(ref)
+      setSuccess(result.reference)
     } catch {
-      setSubmitError('An unexpected network error occurred. Please try again.')
+      setSubmitError('An unexpected network error occurred. Please check your internet connection and try again.')
     } finally {
       setLoading(false)
     }
