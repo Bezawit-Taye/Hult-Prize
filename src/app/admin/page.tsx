@@ -3,7 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import AdminDashboard from '@/components/admin/AdminDashboard'
 
 export const metadata = {
-  title: 'Admin Dashboard | Hult Prize OnCampus',
+  title: 'Admin Dashboard | EF Hult Prize — OnCampus',
+  description: 'Organizer management portal for EF Hult Prize — OnCampus registrations.',
 }
 
 export default async function AdminPage() {

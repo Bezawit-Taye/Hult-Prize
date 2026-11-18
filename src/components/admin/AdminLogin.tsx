@@ -3,7 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Trophy, Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react'
+import { Loader2, AlertCircle, Eye, EyeOff, ArrowLeft } from 'lucide-react'
+import Logo from '@/components/Logo'
+import Link from 'next/link'
 
 export default function AdminLogin() {
   const router = useRouter()
@@ -26,7 +28,8 @@ export default function AdminLogin() {
       })
 
       if (authError) {
-        setError('Invalid email or password. Please try again.')
+        console.error('Supabase login error:', authError)
+        setError(authError.message || 'Invalid email or password. Please try again.')
         return
       }
 
@@ -40,39 +43,47 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-slate-50/70 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-primary rounded-2xl mb-4">
-            <Trophy className="w-7 h-7 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">Admin Access</h1>
-          <p className="text-sm text-gray-500 mt-1">Hult Prize OnCampus Portal</p>
+        {/* Brand Header with Official Logo */}
+        <div className="text-center mb-8 flex flex-col items-center">
+          <Logo variant="dark" size="lg" className="justify-center mb-4" />
+          <h1 className="text-2xl font-black text-brand-midnight tracking-tight">
+            Organizer Portal
+          </h1>
+          <p className="text-xs text-brand-midnight/60 mt-1 font-medium">
+            Authorized Campus Coordinators & Administrators
+          </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        {/* Card */}
+        <div className="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-8">
           {error && (
-            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl mb-5">
-              <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-              <p className="text-sm text-red-700">{error}</p>
+            <div className="flex items-start gap-2.5 p-3.5 bg-red-50 border border-brand-red/20 rounded-xl mb-5">
+              <AlertCircle className="w-4 h-4 text-brand-red flex-shrink-0 mt-0.5" />
+              <p className="text-xs font-semibold text-brand-red">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+                Admin Email
+              </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@university.edu"
+                placeholder="coordinator@university.edu"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors text-sm"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-brand-midnight placeholder:text-slate-400 focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all text-sm font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+                Password
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -80,12 +91,13 @@ export default function AdminLogin() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-3 pr-10 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors text-sm"
+                  className="w-full px-4 py-3 pr-10 rounded-xl border border-slate-200 text-brand-midnight placeholder:text-slate-400 focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all text-sm font-medium"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-midnight"
+                  aria-label="Toggle password visibility"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -95,24 +107,28 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark disabled:opacity-70 transition-colors flex items-center justify-center gap-2 mt-2"
+              className="w-full py-3.5 bg-brand-pink text-white font-bold rounded-xl hover:bg-brand-pink-hover shadow-md shadow-brand-pink/25 hover:shadow-lg hover:shadow-brand-pink/35 disabled:opacity-70 transition-all duration-200 flex items-center justify-center gap-2 mt-3 text-sm"
             >
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Signing in...
+                  <span>Authenticating...</span>
                 </>
               ) : (
-                'Sign In'
+                <span>Sign In to Dashboard</span>
               )}
             </button>
           </form>
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-6">
-          <a href="/" className="hover:text-primary transition-colors">
-            ← Back to public site
-          </a>
+        <p className="text-center text-xs text-brand-midnight/50 mt-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 hover:text-brand-pink transition-colors font-medium"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Public Website</span>
+          </Link>
         </p>
       </div>
     </div>

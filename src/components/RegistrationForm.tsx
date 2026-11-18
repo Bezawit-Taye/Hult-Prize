@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { CheckCircle, Loader2, AlertCircle } from 'lucide-react'
+import { CheckCircle2, Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
 
 type TeamStatus = 'has_team' | 'looking_for_team' | 'want_to_learn' | ''
 
@@ -44,7 +45,7 @@ export default function RegistrationForm() {
     if (!data.full_name.trim()) e.full_name = 'Full name is required.'
     if (!data.student_id.trim()) e.student_id = 'Student ID is required.'
     if (!data.email.trim()) {
-      e.email = 'Email is required.'
+      e.email = 'University email is required.'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
       e.email = 'Please enter a valid email address.'
     }
@@ -53,17 +54,14 @@ export default function RegistrationForm() {
     } else if (!/^[+\d\s\-().]{7,20}$/.test(data.phone)) {
       e.phone = 'Please enter a valid phone number.'
     }
-    if (!data.department.trim()) e.department = 'Department is required.'
+    if (!data.department.trim()) e.department = 'Department / Major is required.'
     if (!data.academic_year) e.academic_year = 'Academic year is required.'
-    if (!data.team_status) e.team_status = 'Please select a participation option.'
+    if (!data.team_status) e.team_status = 'Please choose a team participation option.'
     setErrors(e)
     return Object.keys(e).length === 0
   }
 
-  const handleChange = (
-    key: keyof FormData,
-    value: string
-  ) => {
+  const handleChange = (key: keyof FormData, value: string) => {
     setData((d) => ({ ...d, [key]: value }))
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }))
   }
@@ -95,11 +93,11 @@ export default function RegistrationForm() {
       if (error) {
         if (error.code === '23505') {
           setSubmitError(
-            'A registration with this Student ID or email already exists. Please check your details.'
+            'A registration with this Student ID or email already exists. Please verify your details or contact your OnCampus coordinator.'
           )
         } else {
           setSubmitError(
-            'Something went wrong. Please try again or contact the organizing team.'
+            'Unable to process registration. Please check your internet connection or try again.'
           )
         }
         return
@@ -108,39 +106,50 @@ export default function RegistrationForm() {
       const ref = result.id.split('-')[0].toUpperCase()
       setSuccess(ref)
     } catch {
-      setSubmitError('An unexpected error occurred. Please try again.')
+      setSubmitError('An unexpected network error occurred. Please try again.')
     } finally {
       setLoading(false)
     }
   }
 
   const inputClass = (key: keyof FormData) =>
-    `w-full px-4 py-3 rounded-xl border ${
-      errors[key] ? 'border-red-400 bg-red-50' : 'border-gray-200 bg-white'
-    } text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors text-sm`
+    `w-full px-4 py-3 rounded-xl border text-sm transition-all outline-none font-medium ${
+      errors[key]
+        ? 'border-brand-red bg-red-50/50 text-brand-ink focus:ring-2 focus:ring-brand-red/20'
+        : 'border-slate-200 bg-white text-brand-midnight placeholder:text-slate-400 hover:border-slate-300 focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20'
+    }`
 
   if (success) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-10 text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <CheckCircle className="w-8 h-8 text-green-600" />
+      <div className="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-8 sm:p-12 text-center">
+        <div className="w-16 h-16 bg-brand-green/15 text-brand-green rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <CheckCircle2 className="w-9 h-9" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-3">Registration Successful!</h2>
-        <p className="text-gray-600 leading-relaxed mb-4">
-          Thank you for your interest in Hult Prize OnCampus. Your registration has been received
+        <h2 className="text-2xl sm:text-3xl font-black text-brand-midnight mb-3">
+          Registration Successful!
+        </h2>
+        <p className="text-brand-midnight/70 leading-relaxed text-sm sm:text-base max-w-md mx-auto mb-6">
+          Thank you for your interest in EF Hult Prize — OnCampus. Your registration has been received
           successfully. Our organizing team will contact you with further information.
         </p>
-        <div className="inline-block bg-gray-50 rounded-xl px-6 py-3 mb-6">
-          <p className="text-xs text-gray-500 mb-1">Your Registration Reference</p>
-          <p className="text-xl font-black text-primary tracking-widest">{success}</p>
+
+        <div className="inline-block bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 mb-8">
+          <p className="text-xs uppercase tracking-wider font-semibold text-brand-midnight/50 mb-1">
+            Your Registration Reference
+          </p>
+          <p className="text-2xl font-black text-brand-pink tracking-widest font-mono">
+            {success}
+          </p>
         </div>
+
         <div>
-          <a
+          <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-midnight text-white rounded-xl font-bold hover:bg-brand-midnight-light transition-all duration-200 shadow-md shadow-brand-midnight/10 text-sm"
           >
-            Return to Homepage
-          </a>
+            <ArrowLeft className="w-4 h-4" />
+            <span>Return to Homepage</span>
+          </Link>
         </div>
       </div>
     )
@@ -149,24 +158,28 @@ export default function RegistrationForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-6"
+      className="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-6 sm:p-10 space-y-8"
     >
       {submitError && (
-        <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
-          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-red-700">{submitError}</p>
+        <div className="flex items-start gap-3 p-4 bg-red-50 border border-brand-red/20 rounded-2xl">
+          <AlertCircle className="w-5 h-5 text-brand-red flex-shrink-0 mt-0.5" />
+          <p className="text-sm font-medium text-brand-red">{submitError}</p>
         </div>
       )}
 
-      {/* Personal Information */}
+      {/* Section 1: Personal Information */}
       <div>
-        <h3 className="text-base font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">
-          Personal Information
-        </h3>
+        <div className="flex items-center gap-2 pb-3 mb-5 border-b border-slate-100">
+          <span className="w-2 h-2 rounded-full bg-brand-pink" />
+          <h3 className="text-base font-extrabold text-brand-midnight">
+            Personal Information
+          </h3>
+        </div>
+
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Full Name <span className="text-primary">*</span>
+            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+              Full Name <span className="text-brand-pink">*</span>
             </label>
             <input
               type="text"
@@ -175,13 +188,15 @@ export default function RegistrationForm() {
               value={data.full_name}
               onChange={(e) => handleChange('full_name', e.target.value)}
             />
-            {errors.full_name && <p className="mt-1 text-xs text-red-500">{errors.full_name}</p>}
+            {errors.full_name && (
+              <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.full_name}</p>
+            )}
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Student ID <span className="text-primary">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+                Student ID <span className="text-brand-pink">*</span>
               </label>
               <input
                 type="text"
@@ -191,12 +206,13 @@ export default function RegistrationForm() {
                 onChange={(e) => handleChange('student_id', e.target.value)}
               />
               {errors.student_id && (
-                <p className="mt-1 text-xs text-red-500">{errors.student_id}</p>
+                <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.student_id}</p>
               )}
             </div>
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                University Email <span className="text-primary">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+                University Email <span className="text-brand-pink">*</span>
               </label>
               <input
                 type="email"
@@ -205,14 +221,16 @@ export default function RegistrationForm() {
                 value={data.email}
                 onChange={(e) => handleChange('email', e.target.value)}
               />
-              {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+              {errors.email && (
+                <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.email}</p>
+              )}
             </div>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Phone Number <span className="text-primary">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+                Phone Number <span className="text-brand-pink">*</span>
               </label>
               <input
                 type="tel"
@@ -221,28 +239,31 @@ export default function RegistrationForm() {
                 value={data.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
               />
-              {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone}</p>}
+              {errors.phone && (
+                <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.phone}</p>
+              )}
             </div>
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Department <span className="text-primary">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+                Department / Faculty <span className="text-brand-pink">*</span>
               </label>
               <input
                 type="text"
-                placeholder="e.g. Computer Science"
+                placeholder="e.g. Computer Science & Engineering"
                 className={inputClass('department')}
                 value={data.department}
                 onChange={(e) => handleChange('department', e.target.value)}
               />
               {errors.department && (
-                <p className="mt-1 text-xs text-red-500">{errors.department}</p>
+                <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.department}</p>
               )}
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Academic Year <span className="text-primary">*</span>
+            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+              Academic Year <span className="text-brand-pink">*</span>
             </label>
             <select
               className={inputClass('academic_year')}
@@ -250,72 +271,76 @@ export default function RegistrationForm() {
               onChange={(e) => handleChange('academic_year', e.target.value)}
             >
               <option value="">Select your academic year</option>
-              <option value="1st Year">1st Year</option>
-              <option value="2nd Year">2nd Year</option>
-              <option value="3rd Year">3rd Year</option>
-              <option value="4th Year">4th Year</option>
+              <option value="1st Year">1st Year (Freshman)</option>
+              <option value="2nd Year">2nd Year (Sophomore)</option>
+              <option value="3rd Year">3rd Year (Junior)</option>
+              <option value="4th Year">4th Year (Senior)</option>
               <option value="5th Year">5th Year</option>
-              <option value="Graduate">Graduate</option>
+              <option value="Graduate">Graduate / Post-graduate</option>
             </select>
             {errors.academic_year && (
-              <p className="mt-1 text-xs text-red-500">{errors.academic_year}</p>
+              <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.academic_year}</p>
             )}
           </div>
         </div>
       </div>
 
-      {/* Participation Information */}
+      {/* Section 2: Participation Information */}
       <div>
-        <h3 className="text-base font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">
-          Participation Information
-        </h3>
-        <div className="space-y-4">
+        <div className="flex items-center gap-2 pb-3 mb-5 border-b border-slate-100">
+          <span className="w-2 h-2 rounded-full bg-brand-purple" />
+          <h3 className="text-base font-extrabold text-brand-midnight">
+            Participation Information
+          </h3>
+        </div>
+
+        <div className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              Do you currently have a team? <span className="text-primary">*</span>
+            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-2.5">
+              Do you currently have a team? <span className="text-brand-pink">*</span>
             </label>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {[
-                { value: 'has_team', label: 'Yes, I already have a team.' },
-                { value: 'looking_for_team', label: 'No, I am looking for teammates.' },
-                { value: 'want_to_learn', label: 'I want to learn more before joining.' },
-              ].map((opt) => (
-                <label
-                  key={opt.value}
-                  className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
-                    data.team_status === opt.value
-                      ? 'border-primary bg-red-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="team_status"
-                    value={opt.value}
-                    checked={data.team_status === opt.value}
-                    onChange={(e) => {
-                      handleChange('team_status', e.target.value)
-                    }}
-                    className="w-4 h-4 text-primary"
-                  />
-                  <span className="text-sm text-gray-700">{opt.label}</span>
-                </label>
-              ))}
+                { value: 'has_team', label: 'Yes, I already have a team formed.' },
+                { value: 'looking_for_team', label: 'No, I am looking for teammates on campus.' },
+                { value: 'want_to_learn', label: 'I want to attend workshops and learn more before joining.' },
+              ].map((opt) => {
+                const isSelected = data.team_status === opt.value
+                return (
+                  <label
+                    key={opt.value}
+                    className={`flex items-center gap-3.5 p-3.5 rounded-xl border cursor-pointer transition-all ${
+                      isSelected
+                        ? 'border-brand-pink bg-brand-pink-light/60 text-brand-midnight shadow-sm'
+                        : 'border-slate-200 hover:border-slate-300 bg-white text-brand-midnight/80'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="team_status"
+                      value={opt.value}
+                      checked={isSelected}
+                      onChange={(e) => handleChange('team_status', e.target.value)}
+                      className="w-4 h-4 text-brand-pink focus:ring-brand-pink accent-brand-pink"
+                    />
+                    <span className="text-sm font-semibold">{opt.label}</span>
+                  </label>
+                )
+              })}
             </div>
             {errors.team_status && (
-              <p className="mt-1 text-xs text-red-500">{errors.team_status}</p>
+              <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.team_status}</p>
             )}
           </div>
 
           {data.team_status === 'has_team' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Team Name{' '}
-                <span className="text-gray-400 font-normal">(optional)</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+                Team Name <span className="text-slate-400 font-normal lowercase">(optional)</span>
               </label>
               <input
                 type="text"
-                placeholder="e.g. Team Innovate"
+                placeholder="e.g. EcoVenture Alpha"
                 className={inputClass('team_name')}
                 value={data.team_name}
                 onChange={(e) => handleChange('team_name', e.target.value)}
@@ -324,13 +349,13 @@ export default function RegistrationForm() {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              What interests you most about Hult Prize?{' '}
-              <span className="text-gray-400 font-normal">(optional)</span>
+            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+              What interests you most about EF Hult Prize?{' '}
+              <span className="text-slate-400 font-normal lowercase">(optional)</span>
             </label>
             <textarea
               rows={3}
-              placeholder="Share what excites you about this opportunity..."
+              placeholder="Tell us what problem you want to solve, what drives you, or what you hope to learn..."
               className={`${inputClass('interest')} resize-none`}
               value={data.interest}
               onChange={(e) => handleChange('interest', e.target.value)}
@@ -342,20 +367,20 @@ export default function RegistrationForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
+        className="w-full py-4 bg-brand-pink text-white font-bold rounded-xl shadow-lg shadow-brand-pink/25 hover:bg-brand-pink-hover hover:shadow-xl hover:shadow-brand-pink/35 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 text-base"
       >
         {loading ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
-            Submitting...
+            <span>Submitting Registration...</span>
           </>
         ) : (
-          'Complete Registration'
+          <span>Complete Registration</span>
         )}
       </button>
 
-      <p className="text-xs text-center text-gray-400">
-        By registering, you agree to be contacted by the Hult Prize OnCampus organizing team.
+      <p className="text-xs text-center text-brand-midnight/50 font-medium">
+        By registering, you agree to be contacted by the EF Hult Prize — OnCampus organizing team.
       </p>
     </form>
   )
