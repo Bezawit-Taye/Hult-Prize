@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { CheckCircle2, Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { sendConfirmationAction } from '@/app/actions/send-confirmation'
 
 type TeamStatus = 'has_team' | 'looking_for_team' | 'want_to_learn' | ''
 
@@ -43,27 +42,56 @@ export default function RegistrationForm() {
 
   const validate = (): boolean => {
     const e: FormErrors = {}
-    if (!data.full_name.trim()) e.full_name = 'Full name is required.'
-    if (!data.student_id.trim()) e.student_id = 'Student ID is required.'
-    if (!data.email.trim()) {
-      e.email = 'University email is required.'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      e.email = 'Please enter a valid email address.'
+
+    // Full name
+    if (!data.full_name.trim()) {
+      e.full_name = 'Full name is required.'
     }
+
+    // Student ID validation: Must start with ETS followed by digits (e.g. ETS123456, ETS20261234)
+    const normalizedId = data.student_id.trim().toUpperCase()
+    if (!normalizedId) {
+      e.student_id = 'Student ID is required.'
+    } else if (!/^ETS\d+$/.test(normalizedId)) {
+      e.student_id = 'Student ID must start with ETS followed by numbers.'
+    }
+
+    // Email validation: Accepts ANY valid personal or university email address
+    const emailVal = data.email.trim()
+    if (!emailVal) {
+      e.email = 'Email address is required.'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      e.email = 'Please enter a valid email address (e.g. name@gmail.com or name@aastu.edu.et).'
+    }
+
+    // Phone number
     if (!data.phone.trim()) {
       e.phone = 'Phone number is required.'
-    } else if (!/^[+\d\s\-().]{7,20}$/.test(data.phone)) {
+    } else if (!/^[+\d\s\-().]{7,20}$/.test(data.phone.trim())) {
       e.phone = 'Please enter a valid phone number.'
     }
-    if (!data.department.trim()) e.department = 'Department / Major is required.'
-    if (!data.academic_year) e.academic_year = 'Academic year is required.'
-    if (!data.team_status) e.team_status = 'Please choose a team participation option.'
+
+    // Department & Academic Year
+    if (!data.department.trim()) {
+      e.department = 'Department / Major is required.'
+    }
+    if (!data.academic_year) {
+      e.academic_year = 'Academic year is required.'
+    }
+
+    // Participation Status
+    if (!data.team_status) {
+      e.team_status = 'Please choose a team participation option.'
+    }
+
     setErrors(e)
     return Object.keys(e).length === 0
   }
 
   const handleChange = (key: keyof FormData, value: string) => {
-    setData((d) => ({ ...d, [key]: value }))
+    // If updating student_id, automatically normalize to uppercase
+    const processedValue = key === 'student_id' ? value.toUpperCase().replace(/\s+/g, '') : value
+    setData((d) => ({ ...d, [key]: processedValue }))
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }))
   }
 
@@ -74,14 +102,16 @@ export default function RegistrationForm() {
 
     setLoading(true)
     try {
-      // 1. Save registration in Supabase database
       const supabase = createClient()
+      const normalizedStudentId = data.student_id.trim().toUpperCase()
+      const normalizedEmail = data.email.trim().toLowerCase()
+
       const { data: result, error } = await supabase
         .from('registrations')
         .insert({
           full_name: data.full_name.trim(),
-          student_id: data.student_id.trim(),
-          email: data.email.trim().toLowerCase(),
+          student_id: normalizedStudentId,
+          email: normalizedEmail,
           phone: data.phone.trim(),
           department: data.department.trim(),
           academic_year: data.academic_year,
@@ -94,9 +124,13 @@ export default function RegistrationForm() {
 
       if (error) {
         if (error.code === '23505') {
-          setSubmitError(
-            'A registration with this Student ID or email already exists. Please verify your details or contact the HULT PRIZE AASTU team.'
-          )
+          if (error.message.includes('student_id')) {
+            setSubmitError('A registration with this Student ID already exists. Please verify your ID.')
+          } else if (error.message.includes('email')) {
+            setSubmitError('A registration with this Email address already exists. Please use a different email.')
+          } else {
+            setSubmitError('A registration with this Student ID or Email already exists. Please verify your details.')
+          }
         } else {
           setSubmitError(
             'Unable to process registration. Please check your connection or try again.'
@@ -106,27 +140,6 @@ export default function RegistrationForm() {
       }
 
       const ref = result.id.split('-')[0].toUpperCase()
-
-      // 2. Trigger automatic confirmation email via server action
-      // CRITICAL: Email failure must NOT block registration success or revert database
-      try {
-        await sendConfirmationAction({
-          full_name: data.full_name.trim(),
-          student_id: data.student_id.trim(),
-          email: data.email.trim().toLowerCase(),
-          phone: data.phone.trim(),
-          department: data.department.trim(),
-          academic_year: data.academic_year,
-          team_status: data.team_status,
-          team_name: data.team_name.trim() || null,
-          reference_id: ref,
-        })
-      } catch (emailErr) {
-        // Safe server-side log, student is not blocked
-        console.warn('[RegistrationForm] Email delivery notification non-fatal error:', emailErr)
-      }
-
-      // 3. Display registration success screen with reference code
       setSuccess(ref)
     } catch {
       setSubmitError('An unexpected network error occurred. Please try again.')
@@ -138,31 +151,31 @@ export default function RegistrationForm() {
   const inputClass = (key: keyof FormData) =>
     `w-full px-4 py-3 rounded-xl border text-sm transition-all outline-none font-medium ${
       errors[key]
-        ? 'border-brand-red bg-red-50/50 text-brand-ink focus:ring-2 focus:ring-brand-red/20'
-        : 'border-slate-200 bg-white text-brand-midnight placeholder:text-slate-400 hover:border-slate-300 focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20'
+        ? 'border-brand-red bg-red-50/50 dark:bg-red-950/20 text-brand-ink dark:text-white focus:ring-2 focus:ring-brand-red/20'
+        : 'border-slate-200 dark:border-white/15 bg-white dark:bg-[#0A0815] text-brand-midnight dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 hover:border-slate-300 dark:hover:border-white/25 focus:border-brand-pink dark:focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20'
     }`
 
   if (success) {
     return (
-      <div className="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-8 sm:p-12 text-center">
+      <div className="bg-white dark:bg-[#131024] rounded-3xl shadow-sm border border-slate-200/80 dark:border-white/10 p-8 sm:p-12 text-center transition-colors">
         <div className="w-16 h-16 bg-brand-green/15 text-brand-green rounded-2xl flex items-center justify-center mx-auto mb-6">
           <CheckCircle2 className="w-9 h-9" />
         </div>
-        <h2 className="text-2xl sm:text-3xl font-black text-brand-midnight mb-2">
+        <h2 className="text-2xl sm:text-3xl font-black text-brand-midnight dark:text-white mb-2">
           Registration Successful!
         </h2>
         <div className="inline-block mb-4">
-          <span className="text-xs font-bold text-brand-pink tracking-widest uppercase bg-brand-pink/10 px-3 py-1 rounded-full border border-brand-pink/25">
+          <span className="text-xs font-bold text-brand-pink tracking-widest uppercase bg-brand-pink/10 dark:bg-brand-pink/20 px-3 py-1 rounded-full border border-brand-pink/25">
             HULT PRIZE AASTU
           </span>
         </div>
-        <p className="text-brand-midnight/70 leading-relaxed text-sm sm:text-base max-w-md mx-auto mb-6">
+        <p className="text-brand-midnight/70 dark:text-slate-300 leading-relaxed text-sm sm:text-base max-w-md mx-auto mb-6">
           Thank you for registering for <strong>HULT PRIZE AASTU</strong>! Your registration has been received
-          successfully. A confirmation email has been dispatched to your email address.
+          successfully. Our organizing team will contact you with further information.
         </p>
 
-        <div className="inline-block bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 mb-8">
-          <p className="text-xs uppercase tracking-wider font-semibold text-brand-midnight/50 mb-1">
+        <div className="inline-block bg-slate-50 dark:bg-[#0A0815] border border-slate-200 dark:border-white/15 rounded-2xl px-6 py-4 mb-8">
+          <p className="text-xs uppercase tracking-wider font-semibold text-brand-midnight/50 dark:text-slate-400 mb-1">
             Your Registration Reference
           </p>
           <p className="text-2xl font-black text-brand-pink tracking-widest font-mono">
@@ -173,7 +186,7 @@ export default function RegistrationForm() {
         <div>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-midnight text-white rounded-xl font-bold hover:bg-brand-midnight-light transition-all duration-200 shadow-md shadow-brand-midnight/10 text-sm"
+            className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-midnight dark:bg-[#1E1940] text-white rounded-xl font-bold hover:bg-brand-midnight-light dark:hover:bg-[#282255] transition-all duration-200 shadow-md shadow-brand-midnight/10 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Return to HULT PRIZE AASTU Homepage</span>
@@ -186,10 +199,10 @@ export default function RegistrationForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-6 sm:p-10 space-y-8"
+      className="bg-white dark:bg-[#131024] rounded-3xl shadow-sm border border-slate-200/80 dark:border-white/10 p-6 sm:p-10 space-y-8 transition-colors"
     >
       {submitError && (
-        <div className="flex items-start gap-3 p-4 bg-red-50 border border-brand-red/20 rounded-2xl">
+        <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-950/30 border border-brand-red/20 rounded-2xl">
           <AlertCircle className="w-5 h-5 text-brand-red flex-shrink-0 mt-0.5" />
           <p className="text-sm font-medium text-brand-red">{submitError}</p>
         </div>
@@ -197,16 +210,16 @@ export default function RegistrationForm() {
 
       {/* Section 1: Personal Information */}
       <div>
-        <div className="flex items-center gap-2 pb-3 mb-5 border-b border-slate-100">
+        <div className="flex items-center gap-2 pb-3 mb-5 border-b border-slate-100 dark:border-white/10">
           <span className="w-2 h-2 rounded-full bg-brand-pink" />
-          <h3 className="text-base font-extrabold text-brand-midnight">
+          <h3 className="text-base font-extrabold text-brand-midnight dark:text-white">
             Personal Information
           </h3>
         </div>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-1.5">
               Full Name <span className="text-brand-pink">*</span>
             </label>
             <input
@@ -223,41 +236,47 @@ export default function RegistrationForm() {
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-1.5">
                 Student ID <span className="text-brand-pink">*</span>
               </label>
               <input
                 type="text"
-                placeholder="e.g. ETS1234/13"
+                placeholder="e.g. ETS123456"
                 className={inputClass('student_id')}
                 value={data.student_id}
                 onChange={(e) => handleChange('student_id', e.target.value)}
               />
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 block">
+                Must start with ETS followed by numbers (e.g. ETS123456)
+              </span>
               {errors.student_id && (
-                <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.student_id}</p>
+                <p className="mt-1 text-xs font-semibold text-brand-red">{errors.student_id}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
-                University Email <span className="text-brand-pink">*</span>
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-1.5">
+                Email Address <span className="text-brand-pink">*</span>
               </label>
               <input
                 type="email"
-                placeholder="e.g. student@aastu.edu.et"
+                placeholder="e.g. name@gmail.com or name@aastu.edu.et"
                 className={inputClass('email')}
                 value={data.email}
                 onChange={(e) => handleChange('email', e.target.value)}
               />
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 mt-1 block">
+                Personal or university email addresses accepted
+              </span>
               {errors.email && (
-                <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.email}</p>
+                <p className="mt-1 text-xs font-semibold text-brand-red">{errors.email}</p>
               )}
             </div>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-1.5">
                 Phone Number <span className="text-brand-pink">*</span>
               </label>
               <input
@@ -273,7 +292,7 @@ export default function RegistrationForm() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-1.5">
                 Department / Major <span className="text-brand-pink">*</span>
               </label>
               <input
@@ -290,7 +309,7 @@ export default function RegistrationForm() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-1.5">
               Academic Year <span className="text-brand-pink">*</span>
             </label>
             <select
@@ -315,16 +334,16 @@ export default function RegistrationForm() {
 
       {/* Section 2: Participation Information */}
       <div>
-        <div className="flex items-center gap-2 pb-3 mb-5 border-b border-slate-100">
+        <div className="flex items-center gap-2 pb-3 mb-5 border-b border-slate-100 dark:border-white/10">
           <span className="w-2 h-2 rounded-full bg-brand-purple" />
-          <h3 className="text-base font-extrabold text-brand-midnight">
+          <h3 className="text-base font-extrabold text-brand-midnight dark:text-white">
             Participation Information
           </h3>
         </div>
 
         <div className="space-y-5">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-2.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-2.5">
               Do you currently have a team? <span className="text-brand-pink">*</span>
             </label>
             <div className="space-y-2.5">
@@ -339,8 +358,8 @@ export default function RegistrationForm() {
                     key={opt.value}
                     className={`flex items-center gap-3.5 p-3.5 rounded-xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'border-brand-pink bg-brand-pink-light/60 text-brand-midnight shadow-sm'
-                        : 'border-slate-200 hover:border-slate-300 bg-white text-brand-midnight/80'
+                        ? 'border-brand-pink bg-brand-pink-light/60 dark:bg-brand-pink/20 text-brand-midnight dark:text-white shadow-sm'
+                        : 'border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 bg-white dark:bg-[#0A0815] text-brand-midnight/80 dark:text-slate-300'
                     }`}
                   >
                     <input
@@ -363,7 +382,7 @@ export default function RegistrationForm() {
 
           {data.team_status === 'has_team' && (
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-1.5">
                 Team Name <span className="text-slate-400 font-normal lowercase">(optional)</span>
               </label>
               <input
@@ -377,7 +396,7 @@ export default function RegistrationForm() {
           )}
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-1.5">
               What interests you most about HULT PRIZE AASTU?{' '}
               <span className="text-slate-400 font-normal lowercase">(optional)</span>
             </label>
@@ -407,7 +426,7 @@ export default function RegistrationForm() {
         )}
       </button>
 
-      <p className="text-xs text-center text-brand-midnight/50 font-medium">
+      <p className="text-xs text-center text-brand-midnight/50 dark:text-slate-400 font-medium">
         By registering, you agree to be contacted by the HULT PRIZE AASTU organizing team.
       </p>
     </form>

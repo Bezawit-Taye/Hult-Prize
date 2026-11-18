@@ -12,9 +12,15 @@ body {
   font-family: var(--font-figtree), 'Figtree', sans-serif;
   background-color: #ffffff;
   color: #150007;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dark body {
+  background-color: #0A0815;
+  color: #F8FAFC;
 }
 
 ::selection {
-  background-color: rgba(255, 50, 155, 0.2);
+  background-color: rgba(255, 50, 155, 0.25);
   color: #FF329B;
 }

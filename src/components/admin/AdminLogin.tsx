@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Loader2, AlertCircle, Eye, EyeOff, ArrowLeft } from 'lucide-react'
 import Logo from '@/components/Logo'
 import Link from 'next/link'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export default function AdminLogin() {
   const router = useRouter()
@@ -43,28 +44,32 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/70 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-slate-50/70 dark:bg-[#0A0815] flex flex-col items-center justify-center px-4 py-12 transition-colors duration-150 relative">
+      {/* Top right Theme Toggle */}
+      <div className="absolute top-6 right-6">
+        <ThemeToggle />
+      </div>
+
       <div className="w-full max-w-sm">
         {/* Brand Header with Official Logo */}
         <div className="text-center mb-8 flex flex-col items-center">
           <Logo
-            variant="dark"
             size="lg"
             className="justify-center mb-3"
             subtitle="Addis Ababa Science & Technology University"
           />
-          <h1 className="text-xl font-black text-brand-midnight tracking-tight uppercase mt-2">
+          <h1 className="text-xl font-black text-brand-midnight dark:text-white tracking-tight uppercase mt-2">
             Organizer Portal
           </h1>
-          <p className="text-xs text-brand-midnight/60 mt-1 font-medium">
+          <p className="text-xs text-brand-midnight/60 dark:text-slate-400 mt-1 font-medium">
             HULT PRIZE AASTU Organizing Committee
           </p>
         </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-8">
+        {/* Login Card */}
+        <div className="bg-white dark:bg-[#131024] rounded-3xl shadow-sm border border-slate-200/80 dark:border-white/10 p-8 transition-colors">
           {error && (
-            <div className="flex items-start gap-2.5 p-3.5 bg-red-50 border border-brand-red/20 rounded-xl mb-5">
+            <div className="flex items-start gap-2.5 p-3.5 bg-red-50 dark:bg-red-950/30 border border-brand-red/20 rounded-xl mb-5">
               <AlertCircle className="w-4 h-4 text-brand-red flex-shrink-0 mt-0.5" />
               <p className="text-xs font-semibold text-brand-red">{error}</p>
             </div>
@@ -72,7 +77,7 @@ export default function AdminLogin() {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-1.5">
                 Admin Email
               </label>
               <input
@@ -81,12 +86,12 @@ export default function AdminLogin() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="coordinator@aastu.edu.et"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-brand-midnight placeholder:text-slate-400 focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all text-sm font-medium"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-white/15 bg-white dark:bg-[#0A0815] text-brand-midnight dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all text-sm font-medium"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 dark:text-slate-300 mb-1.5">
                 Password
               </label>
               <div className="relative">
@@ -96,12 +101,12 @@ export default function AdminLogin() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-3 pr-10 rounded-xl border border-slate-200 text-brand-midnight placeholder:text-slate-400 focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all text-sm font-medium"
+                  className="w-full px-4 py-3 pr-10 rounded-xl border border-slate-200 dark:border-white/15 bg-white dark:bg-[#0A0815] text-brand-midnight dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all text-sm font-medium"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-midnight"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-midnight dark:hover:text-white"
                   aria-label="Toggle password visibility"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -126,7 +131,7 @@ export default function AdminLogin() {
           </form>
         </div>
 
-        <p className="text-center text-xs text-brand-midnight/50 mt-6">
+        <p className="text-center text-xs text-brand-midnight/50 dark:text-slate-400 mt-6">
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 hover:text-brand-pink transition-colors font-medium"

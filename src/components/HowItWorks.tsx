@@ -37,19 +37,19 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-24 bg-slate-50/70 border-y border-slate-100">
+    <section id="how-it-works" className="py-24 bg-slate-50/70 dark:bg-[#0D0B1C] border-y border-slate-100 dark:border-white/10 transition-colors duration-150">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-purple-light border border-brand-purple/20 mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-purple-light dark:bg-brand-purple/15 border border-brand-purple/20 dark:border-brand-purple/30 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-purple" />
             <span className="text-xs font-black uppercase tracking-wider text-brand-purple">
               The Competition Process
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-midnight tracking-tight uppercase">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-midnight dark:text-white tracking-tight uppercase">
             How It <span className="text-brand-pink">Works</span>
           </h2>
-          <p className="text-brand-midnight/65 mt-4 max-w-xl mx-auto text-base sm:text-lg">
+          <p className="text-brand-midnight/65 dark:text-slate-300 mt-4 max-w-xl mx-auto text-base sm:text-lg">
             Your journey through HULT PRIZE AASTU from campus registration to international qualifiers.
           </p>
         </div>
@@ -60,11 +60,11 @@ export default function HowItWorks() {
             return (
               <div
                 key={step.number}
-                className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200/80 hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between"
+                className="bg-white dark:bg-[#131024] rounded-2xl p-7 shadow-sm border border-slate-200/80 dark:border-white/10 hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <span className="text-xs font-black tracking-widest text-brand-midnight/40 font-mono">
+                    <span className="text-xs font-black tracking-widest text-brand-midnight/40 dark:text-slate-400 font-mono">
                       STEP {step.number}
                     </span>
                     <div
@@ -73,14 +73,14 @@ export default function HowItWorks() {
                       <Icon className="w-6 h-6" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-brand-midnight mb-2.5">{step.title}</h3>
-                  <p className="text-sm text-brand-midnight/70 leading-relaxed font-normal">
+                  <h3 className="text-xl font-bold text-brand-midnight dark:text-white mb-2.5">{step.title}</h3>
+                  <p className="text-sm text-brand-midnight/70 dark:text-slate-300 leading-relaxed font-normal">
                     {step.description}
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-100">
-                  <div className="w-full bg-slate-100 h-1 rounded-full overflow-hidden">
+                <div className="mt-6 pt-4 border-t border-slate-100 dark:border-white/10">
+                  <div className="w-full bg-slate-100 dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
                     <div
                       className={`h-full ${step.color}`}
                       style={{

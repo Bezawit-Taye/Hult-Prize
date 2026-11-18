@@ -25,8 +25,28 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={figtree.variable}>
-      <body className="font-sans antialiased bg-white text-brand-ink selection:bg-brand-pink/20 selection:text-brand-pink">
+    <html lang="en" className={figtree.variable} suppressHydrationWarning>
+      <head>
+        {/* Anti-FOUC inline script for instant theme application */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('theme');
+                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  if (saved === 'dark' || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="font-sans antialiased bg-white dark:bg-[#0A0815] text-brand-ink dark:text-slate-100 selection:bg-brand-pink/20 selection:text-brand-pink min-h-screen">
         {children}
       </body>
     </html>

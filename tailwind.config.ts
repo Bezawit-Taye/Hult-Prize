@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -24,7 +25,14 @@ const config: Config = {
           blue: '#12B1E7',       // Sky Blue (Occasional accent)
           yellow: '#FDD40E',     // Sun Yellow (Occasional accent)
           green: '#06B47A',      // Aloe Green (Occasional accent)
-          red: '#FB0000',        // Red (Occasional accent)
+          red: '#FB0000',        // Red (Alert/Validation)
+        },
+        dark: {
+          bg: '#0A0815',         // Root dark canvas
+          surface: '#131024',    // Elevated card surface
+          elevated: '#1C1836',   // High-elevation card surface / inputs
+          border: 'rgba(255, 255, 255, 0.08)',
+          'border-strong': 'rgba(255, 255, 255, 0.16)',
         },
         primary: {
           DEFAULT: '#FF329B',

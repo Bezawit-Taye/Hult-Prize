@@ -24,7 +24,7 @@ const benefits = [
     icon: BookOpen,
     title: 'Mentorship & Masterclasses',
     description: 'Access tailored bootcamps on business model canvas, market research, and financial modeling organized at AASTU.',
-    iconStyle: 'bg-brand-yellow/15 text-[#C49B00] group-hover:bg-brand-yellow group-hover:text-brand-ink',
+    iconStyle: 'bg-brand-yellow/15 text-[#C49B00] dark:text-brand-yellow group-hover:bg-brand-yellow group-hover:text-brand-ink',
   },
   {
     icon: Globe,
@@ -36,25 +36,25 @@ const benefits = [
     icon: Award,
     title: '$1M Seed Funding Path',
     description: 'Win the AASTU campus stage and unlock the opportunity to compete for $1,000,000 USD in equity-free global funding.',
-    iconStyle: 'bg-brand-midnight/10 text-brand-midnight group-hover:bg-brand-midnight group-hover:text-white',
+    iconStyle: 'bg-brand-midnight/10 dark:bg-white/10 text-brand-midnight dark:text-white group-hover:bg-brand-midnight group-hover:text-white',
   },
 ]
 
 export default function WhyParticipate() {
   return (
-    <section id="why" className="py-24 bg-white">
+    <section id="why" className="py-24 bg-white dark:bg-[#0A0815] transition-colors duration-150">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-pink-light border border-brand-pink/20 mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-pink-light dark:bg-brand-pink/15 border border-brand-pink/20 dark:border-brand-pink/30 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-pink" />
             <span className="text-xs font-black uppercase tracking-wider text-brand-pink">
               Why Join HULT PRIZE AASTU
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-midnight tracking-tight uppercase">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-midnight dark:text-white tracking-tight uppercase">
             Why <span className="text-brand-pink">Participate?</span>
           </h2>
-          <p className="text-brand-midnight/65 mt-4 max-w-xl mx-auto text-base sm:text-lg">
+          <p className="text-brand-midnight/65 dark:text-slate-300 mt-4 max-w-xl mx-auto text-base sm:text-lg">
             HULT PRIZE AASTU is an intensive leadership accelerator and venture launchpad for ambitious students.
           </p>
         </div>
@@ -63,7 +63,7 @@ export default function WhyParticipate() {
           {benefits.map(({ icon: Icon, title, description, iconStyle }) => (
             <div
               key={title}
-              className="p-7 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-brand-pink/30 hover:bg-white hover:shadow-md transition-all duration-200 group flex flex-col justify-between"
+              className="p-7 rounded-2xl bg-slate-50/70 dark:bg-[#131024] border border-slate-200/80 dark:border-white/10 hover:border-brand-pink/30 hover:bg-white dark:hover:bg-[#1C1836] hover:shadow-md transition-all duration-200 group flex flex-col justify-between"
             >
               <div>
                 <div
@@ -71,8 +71,8 @@ export default function WhyParticipate() {
                 >
                   <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-brand-midnight mb-2">{title}</h3>
-                <p className="text-sm text-brand-midnight/70 leading-relaxed font-normal">
+                <h3 className="text-lg font-bold text-brand-midnight dark:text-white mb-2">{title}</h3>
+                <p className="text-sm text-brand-midnight/70 dark:text-slate-300 leading-relaxed font-normal">
                   {description}
                 </p>
               </div>
@@ -81,7 +81,7 @@ export default function WhyParticipate() {
         </div>
 
         {/* CTA Card */}
-        <div className="rounded-3xl bg-brand-midnight text-white p-8 sm:p-12 relative overflow-hidden shadow-xl shadow-brand-midnight/15">
+        <div className="rounded-3xl bg-brand-midnight dark:bg-[#15112B] text-white p-8 sm:p-12 relative overflow-hidden shadow-xl shadow-brand-midnight/15 border border-transparent dark:border-white/15">
           <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-brand-pink/20 rounded-full blur-3xl pointer-events-none" />
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
             <div>

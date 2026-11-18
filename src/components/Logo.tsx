@@ -3,7 +3,6 @@ import Link from 'next/link'
 
 interface LogoProps {
   variant?: 'dark' | 'light'
-  asset?: 'official' | 'dark' | 'light'
   size?: 'sm' | 'md' | 'lg'
   showCampusBadge?: boolean
   subtitle?: string
@@ -13,46 +12,36 @@ interface LogoProps {
 
 export default function Logo({
   variant = 'dark',
-  asset,
   size = 'md',
   showCampusBadge = true,
   subtitle,
   href = '/',
   className = '',
 }: LogoProps) {
-  // Dimensions calibrated to preserve the official logo aspect ratio
+  // Sizing for the official uploaded square logo (idEuIqpG_7_1794977573764.jpeg)
   const dimensions = {
-    sm: { height: 34, width: 50 },
-    md: { height: 44, width: 64 },
-    lg: { height: 56, width: 82 },
+    sm: { size: 36 },
+    md: { size: 46 },
+    lg: { size: 58 },
   }[size]
 
-  // Determine logo source
-  let logoSrc = '/hult-prize-logo-dark.png'
-  if (asset === 'official') {
-    logoSrc = '/hult-prize-logo-official.jpeg'
-  } else if (variant === 'light' || asset === 'light') {
-    logoSrc = '/hult-prize-logo-light.png'
-  }
-
-  const isOfficialSquare = logoSrc.endsWith('.jpeg')
+  // Use the exact uploaded official logo asset
+  const logoSrc = '/idEuIqpG_7_1794977573764.jpeg'
 
   const content = (
     <div className={`flex items-center gap-3 ${className}`}>
-      {/* Official EF Hult Prize Logo Asset */}
+      {/* Official Uploaded EF Hult Prize Logo Badge */}
       <div
-        className={`relative flex-shrink-0 flex items-center justify-center overflow-hidden ${
-          isOfficialSquare ? 'rounded-xl shadow-sm' : ''
-        }`}
-        style={{ height: dimensions.height, width: isOfficialSquare ? dimensions.height : undefined }}
+        className="relative flex-shrink-0 rounded-xl overflow-hidden shadow-sm border border-slate-200/80 dark:border-white/20 bg-brand-midnight"
+        style={{ width: dimensions.size, height: dimensions.size }}
       >
         <Image
           src={logoSrc}
-          alt="Hult Prize Official Logo"
-          width={isOfficialSquare ? dimensions.height : dimensions.width}
-          height={dimensions.height}
+          alt="HULT PRIZE AASTU Official Logo"
+          width={dimensions.size}
+          height={dimensions.size}
           priority
-          className="h-full w-auto object-contain"
+          className="w-full h-full object-cover"
         />
       </div>
 
@@ -66,7 +55,11 @@ export default function Logo({
                 : size === 'lg'
                 ? 'text-lg sm:text-2xl'
                 : 'text-base sm:text-lg'
-            } ${variant === 'light' ? 'text-white' : 'text-brand-midnight'}`}
+            } ${
+              variant === 'light'
+                ? 'text-white'
+                : 'text-brand-midnight dark:text-white'
+            }`}
           >
             HULT PRIZE
           </span>
@@ -77,7 +70,7 @@ export default function Logo({
               } ${
                 variant === 'light'
                   ? 'bg-brand-pink/25 text-brand-pink border border-brand-pink/40 shadow-sm'
-                  : 'bg-brand-pink/15 text-brand-pink border border-brand-pink/35 shadow-sm'
+                  : 'bg-brand-pink/15 dark:bg-brand-pink/25 text-brand-pink border border-brand-pink/35 dark:border-brand-pink/40 shadow-sm'
               }`}
             >
               AASTU
@@ -87,7 +80,9 @@ export default function Logo({
         {subtitle && (
           <span
             className={`text-[10px] sm:text-[11px] font-medium leading-tight mt-1 truncate ${
-              variant === 'light' ? 'text-gray-300' : 'text-brand-midnight/65'
+              variant === 'light'
+                ? 'text-gray-300'
+                : 'text-brand-midnight/65 dark:text-slate-400'
             }`}
           >
             {subtitle}
