@@ -5,7 +5,7 @@ const steps = [
     number: '01',
     icon: UserPlus,
     title: 'Register',
-    description: 'Sign up for EF Hult Prize — OnCampus and gain entry into our campus training and resources.',
+    description: 'Sign up for HULT PRIZE AASTU to gain access to exclusive campus workshops, resources, and challenge toolkits.',
     color: 'bg-brand-midnight text-white',
     accentBorder: 'border-brand-midnight/20',
   },
@@ -13,7 +13,7 @@ const steps = [
     number: '02',
     icon: Users2,
     title: 'Connect',
-    description: 'Meet motivated peers across disciplines, discover complementary skills, and form your team.',
+    description: 'Meet fellow AASTU students across software, electrical, mechanical, and civil disciplines to form your startup team.',
     color: 'bg-brand-purple text-white',
     accentBorder: 'border-brand-purple/20',
   },
@@ -21,7 +21,7 @@ const steps = [
     number: '03',
     icon: Sparkles,
     title: 'Innovate',
-    description: 'Design and validate a sustainable social business idea under the guidance of expert mentors.',
+    description: 'Design and validate an impactful, revenue-generating social enterprise guided by seasoned faculty and startup mentors.',
     color: 'bg-brand-pink text-white',
     accentBorder: 'border-brand-pink/20',
   },
@@ -29,7 +29,7 @@ const steps = [
     number: '04',
     icon: Award,
     title: 'Compete',
-    description: 'Pitch your venture at the OnCampus Finals to win and advance directly to the Global Qualifiers.',
+    description: 'Pitch your venture at the HULT PRIZE AASTU Finals for the prestigious chance to represent AASTU in the Global Qualifiers.',
     color: 'bg-brand-blue text-white',
     accentBorder: 'border-brand-blue/20',
   },
@@ -40,17 +40,17 @@ export default function HowItWorks() {
     <section id="how-it-works" className="py-24 bg-slate-50/70 border-y border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-purple-light border border-brand-purple/20 mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-purple-light border border-brand-purple/20 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-purple" />
-            <span className="text-xs font-bold uppercase tracking-wider text-brand-purple">
-              The Journey
+            <span className="text-xs font-black uppercase tracking-wider text-brand-purple">
+              The Competition Process
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-midnight tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-midnight tracking-tight uppercase">
             How It <span className="text-brand-pink">Works</span>
           </h2>
           <p className="text-brand-midnight/65 mt-4 max-w-xl mx-auto text-base sm:text-lg">
-            Your step-by-step pathway from student changemaker to global entrepreneur.
+            Your journey through HULT PRIZE AASTU from campus registration to international qualifiers.
           </p>
         </div>
 

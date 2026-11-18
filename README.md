@@ -1,114 +1,121 @@
-# EF Hult Prize — OnCampus Registration Portal
+# HULT PRIZE AASTU — Official Registration Portal
 
-A complete, professional registration platform for the **EF Hult Prize — OnCampus** program, redesigned using the current official brand identity and built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **Supabase**.
+A complete, responsive, full-stack registration and organizer management platform for **HULT PRIZE AASTU** at **Addis Ababa Science and Technology University (AASTU)**.
 
----
-
-## 🎨 Official Brand Identity
-
-| Color Name | Hex Code | Role |
-|------------|----------|------|
-| **Heritage Pink** | `#FF329B` | Primary Accent & Main Brand Color |
-| **Purple** | `#8A2890` | Secondary Brand Color |
-| **Midnight** | `#292563` | Headings, Navigation & Contrast Sections |
-| **Ink** | `#150007` | Deep Dark Text & Primary Contrast |
-| **Gallery White** | `#FFFFFF` | Background Surfaces & Clean Canvas |
-| **Sky Blue** | `#12B1E7` | Occasional Accent |
-| **Sun Yellow** | `#FDD40E` | Occasional Accent |
-| **Aloe Green** | `#06B47A` | Occasional Accent |
-| **Red** | `#FB0000` | Alert / Occasional Accent |
-
-### Typography
-- **Primary Typeface:** [Figtree](https://fonts.google.com/specimen/Figtree)
-  - `Figtree Black (900)`: Hero main headlines
-  - `Figtree Bold (700)`: Section titles & card headings
-  - `Figtree Regular / Medium / SemiBold`: UI labels, body text, form elements
-
-### Brand Assets
-- Official logo files are stored locally in `/public`:
-  - `public/hult-prize-logo-dark.png` (for white/light backgrounds)
-  - `public/hult-prize-logo-light.png` (for Midnight/dark backgrounds)
-  - Sourced directly from [ask.hultprize.org](https://ask.hultprize.org/en_US/our-brand-and-guidelines/logos).
+Built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **Supabase**, and **Resend**.
 
 ---
 
-## Features
+## 🎨 Brand Identity: HULT PRIZE AASTU
 
-- 🌐 **Public Landing Page**
-  - Navigation bar with official logo & responsive mobile drawer
-  - Hero section: *"Turn Your Ideas Into Impact."* with Figtree Black typography
-  - About EF Hult Prize & United Nations SDGs alignment
-  - 4-step visual flow: Register, Connect, Innovate, Compete
-  - Why Participate benefits grid
-  - Interactive FAQ accordion
-  - Midnight brand footer with university & social placeholders
-- 📝 **Student Registration Form**
-  - Personal information (Name, Student ID, Email, Phone, Department, Year)
-  - Team status selection & optional idea interest
-  - Full client validation with duplicate prevention (Student ID & Email)
-  - Generates unique reference ID upon success
-- 🔒 **Organizer Admin Portal (`/admin`)**
-  - Protected by Supabase Auth and Next.js middleware
-  - Metric summary cards (Total, Has Team, Looking for Team, Want to Learn)
-  - Search by student name, ID, or email
-  - Filter by department, academic year, and team status
-  - Registration detail modal inspection
-  - Delete registration with confirmation
-  - **Export to CSV** (Excel-compatible with all fields)
+- **Main Brand Name:** **HULT PRIZE** (bold, uppercase, visually prominent)
+- **Campus Lockup:** **AASTU** (Addis Ababa Science and Technology University)
+- **Official Brand Palette:**
+  - **Heritage Pink:** `#FF329B` (primary brand accent, buttons, focus rings, badges)
+  - **Midnight:** `#292563` (headings, dark hero, organizer navigation)
+  - **Purple:** `#8A2890` (secondary brand color, cards, ambient lighting)
+  - **Ink:** `#150007` (deep contrast typography)
+  - **Gallery White:** `#FFFFFF` (clean reading surfaces)
+  - **Sky Blue:** `#12B1E7` & **Aloe Green:** `#06B47A` (status badges & accents)
+- **Official Typography:** [Figtree](https://fonts.google.com/specimen/Figtree) (`Figtree Black`, `Figtree Bold`, `Figtree Medium`, `Figtree Regular`)
+- **Official Logo Assets:**
+  - `public/hult-prize-logo-official.jpeg` (Official square avatar/badge)
+  - `public/hult-prize-logo-dark.png` (Transparent official logo for light backgrounds)
+  - `public/hult-prize-logo-light.png` (Transparent official logo for dark backgrounds)
 
 ---
 
-## Quick Start
+## 🚀 Key Features
 
-### 1. Install Dependencies
+1. **Public Website:**
+   - Responsive Navigation with official logo & **HULT PRIZE AASTU** lockup
+   - Hero section: *"Turn Your Ideas Into Impact."*
+   - About HULT PRIZE AASTU & UN Sustainable Development Goals alignment
+   - 4-step competition journey (Register, Connect, Innovate, Compete)
+   - Why Participate at AASTU benefits
+   - Interactive FAQ accordion
+   - AASTU campus footer
+2. **Student Registration Form (`/register`):**
+   - Personal info (Full name, Student ID, University Email, Phone, Department, Year)
+   - Participation status (Already have a team, Looking for teammates, Learning first)
+   - Real-time client-side validation
+   - Unique reference code generation upon submission
+   - Duplicate prevention on Student ID and Email
+3. **Automatic Registration Confirmation Email (Resend):**
+   - Secure server-side email dispatch upon registration
+   - Branded responsive HTML template for **HULT PRIZE AASTU**
+   - **Fault-tolerant:** If email delivery encounters an issue, the registration is safely retained in the database and the student still receives the registration confirmation screen with their reference code.
+4. **Protected Organizer Dashboard (`/admin`):**
+   - Protected by Supabase Auth and Next.js middleware
+   - Metrics cards (Total, Formed Teams, Looking for Team, Learning first)
+   - Live search by student name, ID, or email
+   - Multi-filtering by Department, Year, and Status
+   - Full registration details modal
+   - Delete registration with confirmation
+   - **Export to CSV:** Excel-compatible download (`HultPrize_AASTU_Registrations_2026.csv`)
 
-```bash
-npm install
-```
+---
 
-### 2. Set Up Supabase
+## 🛠️ Environment Configuration
 
-1. Create a free project at [supabase.com](https://supabase.com).
-2. Go to **SQL Editor** → paste and run `supabase/migrations/001_create_registrations.sql`.
-3. In **Authentication → Users**, click **Add user → Create user** to generate your initial admin credentials.
+Create a `.env.local` file in the root directory:
 
-### 3. Configure Environment Variables
-
-```bash
-cp .env.example .env.local
-```
-
-Edit `.env.local`:
 ```env
+# Supabase Database & Auth
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+
+# Resend Email Delivery
+RESEND_API_KEY=re_your_api_key_here
+EMAIL_FROM="HULT PRIZE AASTU <onboarding@resend.dev>"
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-Find both values in **Project Settings → API**.
+### Resend Email Setup Instructions
 
-### 4. Run Locally
+1. **Create an Account:**
+   - Sign up at [resend.com](https://resend.com).
+2. **Generate an API Key:**
+   - Go to **API Keys** → **Create API Key** → name it `Hult Prize AASTU` → copy the key starting with `re_`.
+   - Set `RESEND_API_KEY=re_...` in `.env.local` (and in Vercel Environment Variables).
+3. **Sender Address (`EMAIL_FROM`):**
+   - **Development & Testing:** Resend provides a free testing domain `onboarding@resend.dev`. Set:
+     ```env
+     EMAIL_FROM="HULT PRIZE AASTU <onboarding@resend.dev>"
+     ```
+     *(Note: With the test domain, Resend allows sending to the email registered on your Resend account).*
+   - **Production Delivery:** To send emails to any student email address, go to **Resend Dashboard → Domains → Add Domain** (e.g. `mail.aastu.edu.et` or your domain), add the provided DNS records (SPF, DKIM, MX), and once verified, set:
+     ```env
+     EMAIL_FROM="HULT PRIZE AASTU <hultprize@yourdomain.com>"
+     ```
 
+---
+
+## 🧪 Testing & Production Build
+
+### Run Locally:
 ```bash
 npm run dev
 ```
-
-- Public Site: [http://localhost:3000](http://localhost:3000)
+- Public Portal: [http://localhost:3000](http://localhost:3000)
 - Registration Form: [http://localhost:3000/register](http://localhost:3000/register)
-- Admin Portal: [http://localhost:3000/admin](http://localhost:3000/admin)
+- Organizer Portal: [http://localhost:3000/admin](http://localhost:3000/admin)
+
+### Production Build:
+```bash
+npm run build
+```
 
 ---
 
-## Deployment (Vercel)
+## ☁️ Deployment (Vercel)
 
-1. Push to GitHub repository.
-2. Import repository at [vercel.com](https://vercel.com).
-3. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` to Environment Variables.
-4. Deploy!
-
----
-
-## Security Notes
-
-- RLS ensures anon users can only INSERT registration records.
-- Only authenticated admins can SELECT, review, or DELETE records.
-- Service-role key is never exposed to the client.
+1. Push all code to your GitHub repository.
+2. In [Vercel](https://vercel.com), import your repository.
+3. Configure the environment variables:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `RESEND_API_KEY`
+   - `EMAIL_FROM`
+   - `NEXT_PUBLIC_SITE_URL`
+4. Click **Deploy**.

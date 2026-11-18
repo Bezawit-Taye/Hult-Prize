@@ -20,11 +20,15 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-[0_2px_12px_rgba(41,37,99,0.04)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Official Logo */}
-          <Logo variant="dark" size="md" />
+          {/* Official HULT PRIZE AASTU Logo */}
+          <Logo
+            variant="dark"
+            size="md"
+            subtitle="Addis Ababa Science & Technology University"
+          />
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-7">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
@@ -36,11 +40,11 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* CTA & Mobile Hamburger */}
+          {/* CTA & Mobile Toggle */}
           <div className="flex items-center gap-4">
             <Link
               href="/register"
-              className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-pink text-white text-sm font-bold shadow-md shadow-brand-pink/20 hover:bg-brand-pink-hover hover:shadow-lg hover:shadow-brand-pink/30 hover:-translate-y-0.5 transition-all duration-200"
+              className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-pink text-white text-sm font-bold shadow-md shadow-brand-pink/20 hover:bg-brand-pink-hover hover:shadow-lg hover:shadow-brand-pink/30 hover:-translate-y-0.5 transition-all duration-200 uppercase tracking-wide"
             >
               <span>Register Now</span>
               <ArrowRight className="w-4 h-4" />
@@ -73,7 +77,7 @@ export default function Navbar() {
             <Link
               href="/register"
               onClick={() => setIsOpen(false)}
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-brand-pink text-white text-sm font-bold shadow-md shadow-brand-pink/20 hover:bg-brand-pink-hover transition-colors"
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-brand-pink text-white text-sm font-bold shadow-md shadow-brand-pink/20 hover:bg-brand-pink-hover transition-colors uppercase tracking-wide"
             >
               <span>Register Now</span>
               <ArrowRight className="w-4 h-4" />

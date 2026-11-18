@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { CheckCircle2, Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { sendConfirmationAction } from '@/app/actions/send-confirmation'
 
 type TeamStatus = 'has_team' | 'looking_for_team' | 'want_to_learn' | ''
 
@@ -73,6 +74,7 @@ export default function RegistrationForm() {
 
     setLoading(true)
     try {
+      // 1. Save registration in Supabase database
       const supabase = createClient()
       const { data: result, error } = await supabase
         .from('registrations')
@@ -93,17 +95,38 @@ export default function RegistrationForm() {
       if (error) {
         if (error.code === '23505') {
           setSubmitError(
-            'A registration with this Student ID or email already exists. Please verify your details or contact your OnCampus coordinator.'
+            'A registration with this Student ID or email already exists. Please verify your details or contact the HULT PRIZE AASTU team.'
           )
         } else {
           setSubmitError(
-            'Unable to process registration. Please check your internet connection or try again.'
+            'Unable to process registration. Please check your connection or try again.'
           )
         }
         return
       }
 
       const ref = result.id.split('-')[0].toUpperCase()
+
+      // 2. Trigger automatic confirmation email via server action
+      // CRITICAL: Email failure must NOT block registration success or revert database
+      try {
+        await sendConfirmationAction({
+          full_name: data.full_name.trim(),
+          student_id: data.student_id.trim(),
+          email: data.email.trim().toLowerCase(),
+          phone: data.phone.trim(),
+          department: data.department.trim(),
+          academic_year: data.academic_year,
+          team_status: data.team_status,
+          team_name: data.team_name.trim() || null,
+          reference_id: ref,
+        })
+      } catch (emailErr) {
+        // Safe server-side log, student is not blocked
+        console.warn('[RegistrationForm] Email delivery notification non-fatal error:', emailErr)
+      }
+
+      // 3. Display registration success screen with reference code
       setSuccess(ref)
     } catch {
       setSubmitError('An unexpected network error occurred. Please try again.')
@@ -125,12 +148,17 @@ export default function RegistrationForm() {
         <div className="w-16 h-16 bg-brand-green/15 text-brand-green rounded-2xl flex items-center justify-center mx-auto mb-6">
           <CheckCircle2 className="w-9 h-9" />
         </div>
-        <h2 className="text-2xl sm:text-3xl font-black text-brand-midnight mb-3">
+        <h2 className="text-2xl sm:text-3xl font-black text-brand-midnight mb-2">
           Registration Successful!
         </h2>
+        <div className="inline-block mb-4">
+          <span className="text-xs font-bold text-brand-pink tracking-widest uppercase bg-brand-pink/10 px-3 py-1 rounded-full border border-brand-pink/25">
+            HULT PRIZE AASTU
+          </span>
+        </div>
         <p className="text-brand-midnight/70 leading-relaxed text-sm sm:text-base max-w-md mx-auto mb-6">
-          Thank you for your interest in EF Hult Prize — OnCampus. Your registration has been received
-          successfully. Our organizing team will contact you with further information.
+          Thank you for registering for <strong>HULT PRIZE AASTU</strong>! Your registration has been received
+          successfully. A confirmation email has been dispatched to your email address.
         </p>
 
         <div className="inline-block bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 mb-8">
@@ -148,7 +176,7 @@ export default function RegistrationForm() {
             className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-midnight text-white rounded-xl font-bold hover:bg-brand-midnight-light transition-all duration-200 shadow-md shadow-brand-midnight/10 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Return to Homepage</span>
+            <span>Return to HULT PRIZE AASTU Homepage</span>
           </Link>
         </div>
       </div>
@@ -183,7 +211,7 @@ export default function RegistrationForm() {
             </label>
             <input
               type="text"
-              placeholder="e.g. Jane Smith"
+              placeholder="e.g. Abebe Kebede"
               className={inputClass('full_name')}
               value={data.full_name}
               onChange={(e) => handleChange('full_name', e.target.value)}
@@ -200,7 +228,7 @@ export default function RegistrationForm() {
               </label>
               <input
                 type="text"
-                placeholder="e.g. 20231234"
+                placeholder="e.g. ETS1234/13"
                 className={inputClass('student_id')}
                 value={data.student_id}
                 onChange={(e) => handleChange('student_id', e.target.value)}
@@ -216,7 +244,7 @@ export default function RegistrationForm() {
               </label>
               <input
                 type="email"
-                placeholder="e.g. jane@university.edu"
+                placeholder="e.g. student@aastu.edu.et"
                 className={inputClass('email')}
                 value={data.email}
                 onChange={(e) => handleChange('email', e.target.value)}
@@ -234,7 +262,7 @@ export default function RegistrationForm() {
               </label>
               <input
                 type="tel"
-                placeholder="e.g. +1 555 000 0000"
+                placeholder="e.g. +251 91 234 5678"
                 className={inputClass('phone')}
                 value={data.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
@@ -246,11 +274,11 @@ export default function RegistrationForm() {
 
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
-                Department / Faculty <span className="text-brand-pink">*</span>
+                Department / Major <span className="text-brand-pink">*</span>
               </label>
               <input
                 type="text"
-                placeholder="e.g. Computer Science & Engineering"
+                placeholder="e.g. Software Engineering / Architecture"
                 className={inputClass('department')}
                 value={data.department}
                 onChange={(e) => handleChange('department', e.target.value)}
@@ -272,11 +300,11 @@ export default function RegistrationForm() {
             >
               <option value="">Select your academic year</option>
               <option value="1st Year">1st Year (Freshman)</option>
-              <option value="2nd Year">2nd Year (Sophomore)</option>
+              <option value="2nd Year">2nd Year (Pre-Engineering / Sophomore)</option>
               <option value="3rd Year">3rd Year (Junior)</option>
-              <option value="4th Year">4th Year (Senior)</option>
-              <option value="5th Year">5th Year</option>
-              <option value="Graduate">Graduate / Post-graduate</option>
+              <option value="4th Year">4th Year</option>
+              <option value="5th Year">5th Year (Senior / Finalist)</option>
+              <option value="Graduate">Postgraduate / Masters</option>
             </select>
             {errors.academic_year && (
               <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.academic_year}</p>
@@ -302,7 +330,7 @@ export default function RegistrationForm() {
             <div className="space-y-2.5">
               {[
                 { value: 'has_team', label: 'Yes, I already have a team formed.' },
-                { value: 'looking_for_team', label: 'No, I am looking for teammates on campus.' },
+                { value: 'looking_for_team', label: 'No, I am looking for teammates at AASTU.' },
                 { value: 'want_to_learn', label: 'I want to attend workshops and learn more before joining.' },
               ].map((opt) => {
                 const isSelected = data.team_status === opt.value
@@ -340,7 +368,7 @@ export default function RegistrationForm() {
               </label>
               <input
                 type="text"
-                placeholder="e.g. EcoVenture Alpha"
+                placeholder="e.g. AASTU Innovators"
                 className={inputClass('team_name')}
                 value={data.team_name}
                 onChange={(e) => handleChange('team_name', e.target.value)}
@@ -350,7 +378,7 @@ export default function RegistrationForm() {
 
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-brand-midnight/70 mb-1.5">
-              What interests you most about EF Hult Prize?{' '}
+              What interests you most about HULT PRIZE AASTU?{' '}
               <span className="text-slate-400 font-normal lowercase">(optional)</span>
             </label>
             <textarea
@@ -367,7 +395,7 @@ export default function RegistrationForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-4 bg-brand-pink text-white font-bold rounded-xl shadow-lg shadow-brand-pink/25 hover:bg-brand-pink-hover hover:shadow-xl hover:shadow-brand-pink/35 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 text-base"
+        className="w-full py-4 bg-brand-pink text-white font-bold rounded-xl shadow-lg shadow-brand-pink/25 hover:bg-brand-pink-hover hover:shadow-xl hover:shadow-brand-pink/35 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 text-base uppercase tracking-wider"
       >
         {loading ? (
           <>
@@ -380,7 +408,7 @@ export default function RegistrationForm() {
       </button>
 
       <p className="text-xs text-center text-brand-midnight/50 font-medium">
-        By registering, you agree to be contacted by the EF Hult Prize — OnCampus organizing team.
+        By registering, you agree to be contacted by the HULT PRIZE AASTU organizing team.
       </p>
     </form>
   )

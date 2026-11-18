@@ -3,76 +3,94 @@ import Link from 'next/link'
 
 interface LogoProps {
   variant?: 'dark' | 'light'
+  asset?: 'official' | 'dark' | 'light'
   size?: 'sm' | 'md' | 'lg'
   showCampusBadge?: boolean
-  campusName?: string
+  subtitle?: string
   href?: string
   className?: string
 }
 
 export default function Logo({
   variant = 'dark',
+  asset,
   size = 'md',
   showCampusBadge = true,
-  campusName,
+  subtitle,
   href = '/',
   className = '',
 }: LogoProps) {
-  // Height sizing mapped to maintain original proportions
+  // Dimensions calibrated to preserve the official logo aspect ratio
   const dimensions = {
-    sm: { height: 32, width: 47 },
-    md: { height: 40, width: 59 },
-    lg: { height: 52, width: 76 },
+    sm: { height: 34, width: 50 },
+    md: { height: 44, width: 64 },
+    lg: { height: 56, width: 82 },
   }[size]
 
-  const logoSrc =
-    variant === 'light'
-      ? '/hult-prize-logo-light.png'
-      : '/hult-prize-logo-dark.png'
+  // Determine logo source
+  let logoSrc = '/hult-prize-logo-dark.png'
+  if (asset === 'official') {
+    logoSrc = '/hult-prize-logo-official.jpeg'
+  } else if (variant === 'light' || asset === 'light') {
+    logoSrc = '/hult-prize-logo-light.png'
+  }
+
+  const isOfficialSquare = logoSrc.endsWith('.jpeg')
 
   const content = (
     <div className={`flex items-center gap-3 ${className}`}>
       {/* Official EF Hult Prize Logo Asset */}
-      <div className="relative flex-shrink-0" style={{ height: dimensions.height }}>
+      <div
+        className={`relative flex-shrink-0 flex items-center justify-center overflow-hidden ${
+          isOfficialSquare ? 'rounded-xl shadow-sm' : ''
+        }`}
+        style={{ height: dimensions.height, width: isOfficialSquare ? dimensions.height : undefined }}
+      >
         <Image
           src={logoSrc}
-          alt="EF Hult Prize"
-          width={dimensions.width}
+          alt="Hult Prize Official Logo"
+          width={isOfficialSquare ? dimensions.height : dimensions.width}
           height={dimensions.height}
           priority
           className="h-full w-auto object-contain"
         />
       </div>
 
-      {/* Official Brand Wordmark & OnCampus Hierarchy */}
+      {/* Official HULT PRIZE AASTU Lockup */}
       <div className="flex flex-col justify-center">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span
-            className={`font-extrabold tracking-tight leading-none ${
-              size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-lg' : 'text-base'
+            className={`font-black tracking-tight uppercase leading-none ${
+              size === 'sm'
+                ? 'text-sm sm:text-base'
+                : size === 'lg'
+                ? 'text-lg sm:text-2xl'
+                : 'text-base sm:text-lg'
             } ${variant === 'light' ? 'text-white' : 'text-brand-midnight'}`}
           >
-            EF Hult Prize
+            HULT PRIZE
           </span>
           {showCampusBadge && (
             <span
-              className={`inline-flex items-center font-bold uppercase tracking-wider rounded-full px-2 py-0.5 text-[10px] leading-tight ${
+              className={`inline-flex items-center font-black uppercase tracking-widest rounded-md px-2 py-0.5 leading-tight ${
+                size === 'sm' ? 'text-[10px]' : 'text-xs'
+              } ${
                 variant === 'light'
-                  ? 'bg-brand-pink/20 text-brand-pink border border-brand-pink/40'
-                  : 'bg-brand-pink/10 text-brand-pink border border-brand-pink/30'
+                  ? 'bg-brand-pink/25 text-brand-pink border border-brand-pink/40 shadow-sm'
+                  : 'bg-brand-pink/15 text-brand-pink border border-brand-pink/35 shadow-sm'
               }`}
             >
-              OnCampus
+              AASTU
             </span>
           )}
         </div>
-        {campusName && (
+        {subtitle && (
           <span
-            className={`text-[11px] font-medium leading-tight mt-0.5 ${
-              variant === 'light' ? 'text-gray-300' : 'text-gray-500'
+            className={`text-[10px] sm:text-[11px] font-medium leading-tight mt-1 truncate ${
+              variant === 'light' ? 'text-gray-300' : 'text-brand-midnight/65'
             }`}
           >
-            {campusName}
+            {subtitle}
           </span>
         )}
       </div>

@@ -47,12 +47,17 @@ export default function AdminLogin() {
       <div className="w-full max-w-sm">
         {/* Brand Header with Official Logo */}
         <div className="text-center mb-8 flex flex-col items-center">
-          <Logo variant="dark" size="lg" className="justify-center mb-4" />
-          <h1 className="text-2xl font-black text-brand-midnight tracking-tight">
+          <Logo
+            variant="dark"
+            size="lg"
+            className="justify-center mb-3"
+            subtitle="Addis Ababa Science & Technology University"
+          />
+          <h1 className="text-xl font-black text-brand-midnight tracking-tight uppercase mt-2">
             Organizer Portal
           </h1>
           <p className="text-xs text-brand-midnight/60 mt-1 font-medium">
-            Authorized Campus Coordinators & Administrators
+            HULT PRIZE AASTU Organizing Committee
           </p>
         </div>
 
@@ -74,7 +79,7 @@ export default function AdminLogin() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="coordinator@university.edu"
+                placeholder="coordinator@aastu.edu.et"
                 required
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 text-brand-midnight placeholder:text-slate-400 focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all text-sm font-medium"
               />
@@ -107,7 +112,7 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-brand-pink text-white font-bold rounded-xl hover:bg-brand-pink-hover shadow-md shadow-brand-pink/25 hover:shadow-lg hover:shadow-brand-pink/35 disabled:opacity-70 transition-all duration-200 flex items-center justify-center gap-2 mt-3 text-sm"
+              className="w-full py-3.5 bg-brand-pink text-white font-bold rounded-xl hover:bg-brand-pink-hover shadow-md shadow-brand-pink/25 hover:shadow-lg hover:shadow-brand-pink/35 disabled:opacity-70 transition-all duration-200 flex items-center justify-center gap-2 mt-3 text-sm uppercase tracking-wider"
             >
               {loading ? (
                 <>

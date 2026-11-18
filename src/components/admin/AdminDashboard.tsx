@@ -140,7 +140,7 @@ export default function AdminDashboard({ userEmail }: { userEmail: string }) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'HultPrize_Registrations_2026.csv'
+    a.download = 'HultPrize_AASTU_Registrations_2026.csv'
     a.click()
     URL.revokeObjectURL(url)
     setExporting(false)
@@ -179,7 +179,12 @@ export default function AdminDashboard({ userEmail }: { userEmail: string }) {
       <header className="bg-brand-midnight text-white sticky top-0 z-30 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Logo variant="light" size="sm" campusName="Organizer Portal" href="/admin" />
+            <Logo
+              variant="light"
+              size="sm"
+              subtitle="AASTU Organizing Portal"
+              href="/admin"
+            />
           </div>
 
           <div className="flex items-center gap-3">
@@ -188,7 +193,7 @@ export default function AdminDashboard({ userEmail }: { userEmail: string }) {
               target="_blank"
               className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-gray-300 hover:text-white px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
             >
-              <span>View Live Site</span>
+              <span>View Public Portal</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
 
@@ -221,25 +226,25 @@ export default function AdminDashboard({ userEmail }: { userEmail: string }) {
         {/* Title & Live Status */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-brand-midnight tracking-tight">
-              Registration Management
+            <h1 className="text-2xl sm:text-3xl font-black text-brand-midnight tracking-tight uppercase">
+              HULT PRIZE <span className="text-brand-pink">AASTU</span> Registrations
             </h1>
             <p className="text-xs sm:text-sm text-brand-midnight/60 mt-1">
-              Review, filter, inspect, and export all campus student registrations.
+              Review, filter, inspect, and export all AASTU student registrations.
             </p>
           </div>
 
           <button
             onClick={handleExport}
             disabled={exporting || registrations.length === 0}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-pink text-white text-xs sm:text-sm font-bold rounded-xl hover:bg-brand-pink-hover shadow-md shadow-brand-pink/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-pink text-white text-xs sm:text-sm font-bold rounded-xl hover:bg-brand-pink-hover shadow-md shadow-brand-pink/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 uppercase tracking-wider"
           >
             {exporting ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <Download className="w-4 h-4" />
             )}
-            <span>Export Registrations (CSV)</span>
+            <span>Export CSV</span>
           </button>
         </div>
 
@@ -251,7 +256,7 @@ export default function AdminDashboard({ userEmail }: { userEmail: string }) {
               value: stats.total,
               icon: Users,
               color: 'bg-brand-midnight text-white',
-              badge: 'All Students',
+              badge: 'AASTU Students',
             },
             {
               label: 'Have a Team',
@@ -328,7 +333,7 @@ export default function AdminDashboard({ userEmail }: { userEmail: string }) {
               }}
               className="px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium text-brand-midnight bg-white focus:outline-none focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 transition-all"
             >
-              <option value="">All Departments</option>
+              <option value="">All AASTU Departments</option>
               {departments.map((d) => (
                 <option key={d} value={d}>
                   {d}
@@ -368,7 +373,7 @@ export default function AdminDashboard({ userEmail }: { userEmail: string }) {
               <option value="want_to_learn">Want to Learn</option>
             </select>
 
-            {/* Clear Filters Button (Visible if active) */}
+            {/* Clear Filters Button */}
             {(search || filterDept || filterYear || filterStatus) && (
               <button
                 type="button"
@@ -561,8 +566,8 @@ export default function AdminDashboard({ userEmail }: { userEmail: string }) {
 
             <div className="flex items-center gap-2 mb-6">
               <span className="w-2.5 h-2.5 rounded-full bg-brand-pink" />
-              <h3 className="text-xl font-black text-brand-midnight tracking-tight">
-                Registration Details
+              <h3 className="text-xl font-black text-brand-midnight tracking-tight uppercase">
+                Registration Details • HULT PRIZE AASTU
               </h3>
             </div>
 
@@ -590,7 +595,7 @@ export default function AdminDashboard({ userEmail }: { userEmail: string }) {
               {viewRecord.interest && (
                 <div className="col-span-2 pt-2 border-t border-slate-100 mt-2">
                   <dt className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    What interests you most about EF Hult Prize?
+                    What interests you most about HULT PRIZE AASTU?
                   </dt>
                   <dd className="text-brand-midnight/80 font-normal leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs sm:text-sm">
                     {viewRecord.interest}

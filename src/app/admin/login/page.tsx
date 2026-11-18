@@ -1,8 +1,8 @@
 import AdminLogin from '@/components/admin/AdminLogin'
 
 export const metadata = {
-  title: 'Admin Login | EF Hult Prize — OnCampus',
-  description: 'Organizer sign-in for the EF Hult Prize — OnCampus management portal.',
+  title: 'Admin Login | HULT PRIZE AASTU',
+  description: 'Organizer sign-in for the HULT PRIZE AASTU management portal.',
 }
 
 export default function AdminLoginPage() {

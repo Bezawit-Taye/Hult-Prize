@@ -5,34 +5,34 @@ import { ChevronDown } from 'lucide-react'
 
 const faqs = [
   {
-    question: 'What is EF Hult Prize?',
+    question: 'What is HULT PRIZE AASTU?',
     answer:
-      "The EF Hult Prize is the world's largest student competition for social entrepreneurship. Each year, it challenges university students globally to solve pressing social issues through viable, scalable for-profit business ventures, with the winning team awarded $1,000,000 USD in equity-free seed capital.",
+      "HULT PRIZE AASTU is the official on-campus chapter of the global Hult Prize Foundation at Addis Ababa Science and Technology University. It challenges university students to build sustainable, for-profit social enterprises addressing pressing global challenges, with winning teams competing for $1,000,000 USD in equity-free global seed capital.",
   },
   {
-    question: 'Who can participate in OnCampus?',
+    question: 'Who can participate in HULT PRIZE AASTU?',
     answer:
-      'Any currently enrolled university student can participate regardless of faculty, major, or academic year. Multidisciplinary teams combining business, engineering, design, and science backgrounds often build the most resilient ventures.',
+      'Any currently enrolled student at Addis Ababa Science and Technology University (AASTU) can participate. Students from all faculties—including Electrical & Mechanical Engineering, Civil & Architecture, Applied Sciences, and Software & Computing—are warmly welcomed.',
   },
   {
     question: 'Can I register without an existing team?',
     answer:
-      'Yes, absolutely! Many students register individually. Through our OnCampus team formation workshops and networking sessions, we assist you in connecting with complementary teammates before competition day.',
+      'Yes, absolutely! Individual students can register. The HULT PRIZE AASTU organizing team hosts team-formation workshops and mixer sessions to help you find teammates with complementary skillsets before competition stages.',
   },
   {
-    question: 'Do I need an existing business idea to join?',
+    question: 'Do I need a business idea to register?',
     answer:
-      'No pre-existing venture or business idea is required. The official challenge prompt will guide you, and our workshops, mentors, and resources will help your team brainstorm, validate, and develop an idea from scratch.',
+      'No pre-existing venture or idea is needed at registration. You will receive challenge toolkits, workshops, and mentor support to brainstorm, test, and develop your innovative concept throughout the program.',
   },
   {
-    question: 'Is registration completely free?',
+    question: 'Is registration free?',
     answer:
-      'Yes, participating in the EF Hult Prize — OnCampus program is 100% free of charge for all eligible university students.',
+      'Yes, participating in HULT PRIZE AASTU is 100% free of charge for all registered AASTU students.',
   },
   {
-    question: 'What happens after I register?',
+    question: 'What happens after I submit my registration?',
     answer:
-      'Upon submitting your registration, you will receive a confirmation with your unique reference ID. Our campus organizing committee will contact you with orientation schedules, masterclasses, challenge toolkits, and team matching events.',
+      'You will receive an automatic confirmation email with your reference code. The HULT PRIZE AASTU organizing team will send you announcements regarding orientation sessions, challenge guidelines, and bootcamp dates.',
   },
 ]
 
@@ -43,17 +43,17 @@ export default function FAQ() {
     <section id="faq" className="py-24 bg-slate-50/70 border-t border-slate-100">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-pink-light border border-brand-pink/20 mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-pink-light border border-brand-pink/20 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-pink" />
-            <span className="text-xs font-bold uppercase tracking-wider text-brand-pink">
-              Common Questions
+            <span className="text-xs font-black uppercase tracking-wider text-brand-pink">
+              Frequently Asked Questions
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-midnight tracking-tight">
-            Frequently Asked <span className="text-brand-pink">Questions</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-midnight tracking-tight uppercase">
+            Questions & <span className="text-brand-pink">Answers</span>
           </h2>
           <p className="text-brand-midnight/65 mt-4 max-w-xl mx-auto text-base">
-            Everything you need to know about participating in EF Hult Prize — OnCampus.
+            Everything you need to know about joining HULT PRIZE AASTU.
           </p>
         </div>
 

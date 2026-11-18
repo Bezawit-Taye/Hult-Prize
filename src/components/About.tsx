@@ -4,8 +4,8 @@ export default function About() {
   const highlights = [
     {
       icon: Globe,
-      label: 'Global Reach',
-      desc: '150+ countries and thousands of universities participating annually.',
+      label: 'Global Stage',
+      desc: '150+ countries and thousands of universities participating annually in the movement.',
       accent: 'bg-brand-blue/10 text-brand-blue group-hover:bg-brand-blue group-hover:text-white',
     },
     {
@@ -16,14 +16,14 @@ export default function About() {
     },
     {
       icon: Lightbulb,
-      label: 'Innovation First',
-      desc: 'Transforming classroom concepts into viable, scalable social ventures.',
+      label: 'AASTU Innovation',
+      desc: 'Transforming STEM concepts from AASTU laboratories into scalable social enterprises.',
       accent: 'bg-brand-yellow/15 text-[#C49B00] group-hover:bg-brand-yellow group-hover:text-brand-ink',
     },
     {
       icon: Users,
-      label: 'Student Led',
-      desc: 'Organized on campus by students, mentors, and academic leaders.',
+      label: 'Campus Community',
+      desc: 'Driven by passionate student leaders, faculty advisors, and mentors at AASTU.',
       accent: 'bg-brand-green/10 text-brand-green group-hover:bg-brand-green group-hover:text-white',
     },
   ]
@@ -34,41 +34,39 @@ export default function About() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Text Story */}
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-pink-light border border-brand-pink/20 mb-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-pink-light border border-brand-pink/20 mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-pink" />
-              <span className="text-xs font-bold uppercase tracking-wider text-brand-pink">
-                About the Movement
+              <span className="text-xs font-black uppercase tracking-wider text-brand-pink">
+                About the Campus Movement
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-midnight tracking-tight mb-6">
-              What is <span className="text-brand-pink">EF Hult Prize?</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-midnight tracking-tight mb-6 uppercase">
+              What is <span className="text-brand-pink">HULT PRIZE AASTU?</span>
             </h2>
 
             <div className="space-y-4 text-brand-midnight/75 text-base sm:text-lg leading-relaxed">
               <p>
-                Often referred to as the <em className="text-brand-midnight font-semibold">&quot;Nobel Prize for Students,&quot;</em> the{' '}
-                <strong className="text-brand-midnight font-bold">EF Hult Prize</strong> is the world&apos;s
-                largest student competition and movement for social entrepreneurship.
+                Known as the <em className="text-brand-midnight font-semibold">&quot;Nobel Prize for Students,&quot;</em> the{' '}
+                <strong className="text-brand-midnight font-bold">Hult Prize</strong> is the world&apos;s
+                largest student engine for launching social impact startups.
               </p>
               <p>
-                Each year, the competition presents university students with a global challenge
-                aligned with the United Nations Sustainable Development Goals (SDGs). Students form
-                teams to formulate innovative, scalable, and for-profit business ideas addressing the
-                most critical global issues.
+                At <strong className="text-brand-midnight font-bold">Addis Ababa Science and Technology University (AASTU)</strong>,{' '}
+                the <strong className="text-brand-pink font-bold">HULT PRIZE AASTU</strong> chapter challenges visionary students to formulate innovative,
+                technology-driven, and commercially viable business solutions addressing pressing global problems aligned with the United Nations SDGs.
               </p>
               <p>
-                The competition culminates in the Global Finals, where the winning team receives{' '}
+                The winning team from AASTU earns direct advancement to the international qualifier stages, competing for{' '}
                 <strong className="text-brand-midnight font-bold">$1,000,000 USD</strong> in equity-free
-                seed capital to bring their social enterprise to reality.
+                global seed capital to launch their social enterprise.
               </p>
             </div>
 
             {/* Quote Block */}
             <div className="mt-8 p-6 bg-brand-purple-light/50 border-l-4 border-brand-purple rounded-r-2xl">
               <p className="text-brand-midnight/90 text-sm sm:text-base font-medium italic">
-                &quot;The EF Hult Prize believes in the boundless power of young minds to change the
-                world. Every great enterprise begins with an idea — yours could be next.&quot;
+                &quot;HULT PRIZE AASTU provides students with the platform, mentorship, and global network needed to transform bold ideas into scalable ventures that change lives.&quot;
               </p>
             </div>
           </div>
@@ -99,10 +97,10 @@ export default function About() {
                 </div>
                 <div>
                   <h4 className="font-extrabold text-white text-base">
-                    United Nations SDGs Alignment
+                    UN Sustainable Development Goals
                   </h4>
                   <p className="text-xs sm:text-sm text-gray-300 mt-0.5">
-                    Every project is evaluated on its measurable contribution toward the 17 UN Sustainable Development Goals.
+                    HULT PRIZE AASTU ventures are built to solve real challenges through the lens of the 17 UN SDGs.
                   </p>
                 </div>
               </div>

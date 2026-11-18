@@ -9,14 +9,18 @@ export default function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
-            <Logo variant="light" size="md" campusName="[Your University Name]" />
+            <Logo
+              variant="light"
+              size="md"
+              subtitle="Addis Ababa Science and Technology University"
+            />
             <p className="text-sm leading-relaxed text-gray-400 max-w-sm pt-2">
-              Empowering university students to solve the world&apos;s most pressing challenges through
-              social entrepreneurship, innovation, and sustainable business ventures.
+              Empowering students at Addis Ababa Science and Technology University to build scalable,
+              for-profit social ventures that address the world&apos;s most critical challenges.
             </p>
             <div className="pt-1">
-              <span className="inline-block text-xs font-medium text-brand-pink bg-brand-pink/10 border border-brand-pink/20 px-3 py-1 rounded-full">
-                📍 [Your University Name] — OnCampus Chapter
+              <span className="inline-block text-xs font-bold text-brand-pink bg-brand-pink/15 border border-brand-pink/30 px-3 py-1 rounded-full uppercase tracking-wider">
+                📍 AASTU Campus • Addis Ababa, Ethiopia
               </span>
             </div>
           </div>
@@ -29,7 +33,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               {[
                 { label: 'Home', href: '/' },
-                { label: 'About the Program', href: '/#about' },
+                { label: 'About HULT PRIZE AASTU', href: '/#about' },
                 { label: 'How It Works', href: '/#how-it-works' },
                 { label: 'Why Participate', href: '/#why' },
                 { label: 'FAQ', href: '/#faq' },
@@ -56,11 +60,11 @@ export default function Footer() {
               <div className="flex items-center gap-2.5 text-gray-400">
                 <Mail className="w-4 h-4 text-brand-pink flex-shrink-0" />
                 <span className="hover:text-white transition-colors cursor-pointer truncate">
-                  [contact@youruniversity.edu]
+                  hultprize@aastu.edu.et
                 </span>
               </div>
               <div className="pt-2">
-                <span className="text-xs text-gray-400 block mb-2 font-medium">Follow our chapter:</span>
+                <span className="text-xs text-gray-400 block mb-2 font-medium">Follow HULT PRIZE AASTU:</span>
                 <div className="flex items-center gap-2.5">
                   {[
                     { icon: Instagram, label: 'Instagram', href: 'https://instagram.com/hultprize' },
@@ -85,9 +89,9 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
-          <p>© 2026 EF Hult Prize — OnCampus. [Your University Name]. All rights reserved.</p>
+          <p>© 2026 HULT PRIZE AASTU • Addis Ababa Science and Technology University. All rights reserved.</p>
           <p className="text-gray-400">
-            Official Competition Platform • EF Hult Prize Foundation
+            Official Campus Program • Hult Prize Foundation
           </p>
         </div>
       </div>

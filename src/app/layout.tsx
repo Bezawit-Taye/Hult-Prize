@@ -10,9 +10,17 @@ const figtree = Figtree({
 })
 
 export const metadata: Metadata = {
-  title: 'EF Hult Prize — OnCampus | [Your University Name]',
+  title: 'HULT PRIZE AASTU | Addis Ababa Science and Technology University',
   description:
-    'Register for EF Hult Prize — OnCampus. Join the global movement empowering young people to solve real-world challenges through entrepreneurship.',
+    'Official registration portal for HULT PRIZE AASTU. Join the world’s largest student movement empowering young entrepreneurs to solve real-world challenges.',
+  keywords: [
+    'HULT PRIZE AASTU',
+    'Hult Prize',
+    'AASTU',
+    'Addis Ababa Science and Technology University',
+    'Social Entrepreneurship',
+    'Student Competition',
+  ],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
