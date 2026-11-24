@@ -18,15 +18,15 @@ export default function Logo({
   href = '/',
   className = '',
 }: LogoProps) {
-  // Sizing for the official uploaded square logo (idEuIqpG_7_1794977573764.jpeg)
+  // Sizing for the official uploaded Hult Prize AASTU logo
   const dimensions = {
     sm: { size: 36 },
     md: { size: 46 },
     lg: { size: 58 },
   }[size]
 
-  // Use the exact uploaded official logo asset
-  const logoSrc = '/idEuIqpG_7_1794977573764.jpeg'
+  // Use the official Hult Prize AASTU image asset
+  const logoSrc = '/Hult-prize-aastu.jpg'
 
   const content = (
     <div className={`flex items-center gap-3 ${className}`}>

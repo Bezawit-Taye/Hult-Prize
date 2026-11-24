@@ -69,10 +69,13 @@ export async function POST(request: NextRequest) {
     const validData = validationResult.data
 
     // 5. Database Insertion via Supabase Server Client
+    // Generate UUID server-side so insert requires only INSERT privileges under strict RLS
+    const registrationId = crypto.randomUUID()
     const supabase = await createClient()
-    const { data: result, error } = await supabase
+    const { error } = await supabase
       .from('registrations')
       .insert({
+        id: registrationId,
         full_name: validData.full_name,
         student_id: validData.student_id,
         email: validData.email,
@@ -83,8 +86,6 @@ export async function POST(request: NextRequest) {
         team_name: validData.team_name,
         interest: validData.interest,
       })
-      .select('id')
-      .single()
 
     if (error) {
       // Handle Unique Constraint Violation (23505) without leaking whether student_id or email collided
@@ -98,8 +99,12 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Log server-side technical error without logging personal data
-      console.error('Supabase registration insertion error code:', error.code)
+      // Safe server-side technical error logging for Vercel Runtime Logs (no PII or secrets)
+      console.error('Supabase registration insertion failure:', {
+        code: error.code,
+        message: error.message,
+        hint: error.hint,
+      })
 
       return NextResponse.json(
         {
@@ -109,7 +114,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const reference = result.id.split('-')[0].toUpperCase()
+    const reference = registrationId.split('-')[0].toUpperCase()
     return NextResponse.json(
       {
         success: true,

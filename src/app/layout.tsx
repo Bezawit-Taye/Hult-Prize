@@ -23,11 +23,10 @@ export const metadata: Metadata = {
   ],
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/icon.png', type: 'image/png' },
+      { url: '/Hult-prize-aastu.jpg' },
     ],
     apple: [
-      { url: '/apple-icon.png' },
+      { url: '/Hult-prize-aastu.jpg' },
     ],
   },
 }
