@@ -299,12 +299,12 @@ export default function RegistrationForm() {
               onChange={(e) => handleChange('academic_year', e.target.value)}
             >
               <option value="">Select your academic year</option>
-              <option value="1st Year">1st Year (Freshman)</option>
-              <option value="2nd Year">2nd Year (Pre-Engineering / Sophomore)</option>
-              <option value="3rd Year">3rd Year (Junior)</option>
-              <option value="4th Year">4th Year</option>
-              <option value="5th Year">5th Year (Senior / Finalist)</option>
-              <option value="Graduate">Postgraduate / Masters</option>
+              <option value="Year 1">Year 1 (Freshman)</option>
+              <option value="Year 2">Year 2 (Pre-Engineering / Sophomore)</option>
+              <option value="Year 3">Year 3 (Junior)</option>
+              <option value="Year 4">Year 4</option>
+              <option value="Year 5">Year 5 (Senior / Finalist)</option>
+              <option value="Postgraduate">Postgraduate</option>
             </select>
             {errors.academic_year && (
               <p className="mt-1.5 text-xs font-semibold text-brand-red">{errors.academic_year}</p>

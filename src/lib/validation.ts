@@ -27,6 +27,36 @@ export const ACADEMIC_YEARS = [
 ] as const
 
 /**
+ * Normalization map for common academic year input variations
+ */
+export const ACADEMIC_YEAR_MAP: Record<string, (typeof ACADEMIC_YEARS)[number]> = {
+  'year 1': 'Year 1',
+  '1st year': 'Year 1',
+  'freshman': 'Year 1',
+  '1': 'Year 1',
+  'year 2': 'Year 2',
+  '2nd year': 'Year 2',
+  'sophomore': 'Year 2',
+  '2': 'Year 2',
+  'year 3': 'Year 3',
+  '3rd year': 'Year 3',
+  'junior': 'Year 3',
+  '3': 'Year 3',
+  'year 4': 'Year 4',
+  '4th year': 'Year 4',
+  '4': 'Year 4',
+  'year 5': 'Year 5',
+  '5th year': 'Year 5',
+  'senior': 'Year 5',
+  '5': 'Year 5',
+  'postgraduate': 'Postgraduate',
+  'graduate': 'Postgraduate',
+  'masters': 'Postgraduate',
+  'master': 'Postgraduate',
+  'phd': 'Postgraduate',
+}
+
+/**
  * Team participation statuses
  */
 export const TEAM_STATUSES = ['has_team', 'looking_for_team', 'want_to_learn'] as const
@@ -44,7 +74,7 @@ export const registrationSchema = z
           .string()
           .min(2, 'Full name must be at least 2 characters.')
           .max(100, 'Full name cannot exceed 100 characters.')
-          .regex(/^[a-zA-Z\s'.\-]+$/, 'Full name contains invalid characters.')
+          .regex(/^[\p{L}\s'.\-]+$/u, 'Full name contains invalid characters.')
       ),
 
     student_id: z
@@ -89,9 +119,18 @@ export const registrationSchema = z
           .max(100, 'Department cannot exceed 100 characters.')
       ),
 
-    academic_year: z.enum(ACADEMIC_YEARS, {
-      message: 'Please select a valid academic year.',
-    }),
+    academic_year: z
+      .string()
+      .transform((val) => {
+        const cleaned = sanitizeText(val)
+        const normalized = ACADEMIC_YEAR_MAP[cleaned.toLowerCase()]
+        return normalized ?? cleaned
+      })
+      .pipe(
+        z.enum(ACADEMIC_YEARS, {
+          message: 'Please select a valid academic year.',
+        })
+      ),
 
     team_status: z.enum(TEAM_STATUSES, {
       message: 'Please choose a valid team participation option.',
